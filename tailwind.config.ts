@@ -14,6 +14,7 @@ export default {
         primary: "#19333F", // Add primary color
         secondary: "#4B6B70", // Add secondary color
         accent: "#34d399", // Accent color for buttons or highlights
+        lilac: "#dc56e0",
       },
       fontFamily: {
         sans: ['Arial', 'Helvetica', 'sans-serif'], // Default sans-serif stack

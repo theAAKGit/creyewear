@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Anonymous_Pro } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -8,19 +8,16 @@ import CartDrawer from "@/components/cartDrawer";
 
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const anonymousPro = Anonymous_Pro({
+  variable: "--font-anonymous-pro",
   subsets: ["latin"],
+  weight: ["400", "700"], // Regular & Bold
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Nikken E-Commerce",
-  description: "Shop the best Nikken products with ease.",
+  title: "creyewear",
+  description: "Best eyewear",
 };
 
 export default function RootLayout({
@@ -30,9 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased text-foreground bg-background flex flex-col min-h-screen`}
-      >
+      <body className={`${anonymousPro.variable} antialiased text-foreground bg-background flex flex-col min-h-screen`}>
+
         <CartProvider>
         <CartDrawer />
         {/* Header for Navigation */}

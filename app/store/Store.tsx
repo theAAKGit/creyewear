@@ -47,7 +47,7 @@ export default function Store() {
   }, []);
   
 
-  const categories = ["todas", "aire", "descanso", "agua", "repuestos"];
+  const categories = ["todas", "hombre", "mujer"];
 
   // Update selectedCategory based on URL search params
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function Store() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar */}
         <aside className="w-full lg:w-1/4">
-          <h2 className="text-xl font-bold mb-4">Categorías</h2>
+          <h2 className="text-black text-xl font-bold mb-4">Categorías</h2>
           <ul className="space-y-2">
             {categories.map((category) => (
               <li key={category}>

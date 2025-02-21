@@ -207,15 +207,17 @@ const AdminPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#D4CDBB] text-[#19333F] p-6">
-      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+    <div className="min-h-screen bg-[white] text-[#19333F] p-6">
+      <h1 className="text-black text-2xl font-bold">Admin Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
         <button onClick={handlePreciosClick} className="bg-blue-600 text-white py-3 px-6 rounded-md">
           Precios
         </button>
+        {/*
         <button onClick={handleBlogClick} className="bg-blue-600 text-white py-3 px-6 rounded-md">
           Blog
         </button>
+        */}
       </div>
 
       {showPrices && (
@@ -238,13 +240,52 @@ const AdminPage = () => {
 
       {showBlog && (
         <div className="mt-6">
-          <h2 className="text-xl font-bold">Publicar Artículo</h2>
-          <input type="text" value={blogTitle} onChange={(e) => setBlogTitle(e.target.value)} className="w-full p-2 mt-2"/>
-          <textarea value={blogContent} onChange={(e) => setBlogContent(e.target.value)} className="w-full p-2 mt-2"/>
-          <button onClick={handlePostBlog} className="bg-green-600 text-white py-2 px-4 mt-4">
-            Publicar
-          </button>
-        </div>
+        <h2 className="text-xl font-bold">Publicar Artículo</h2>
+        <input
+          type="text"
+          placeholder="Título del artículo"
+          value={blogTitle}
+          onChange={(e) => setBlogTitle(e.target.value)}
+          className="w-full p-2 mt-2 border border-gray-400 rounded-md"
+        />
+        <textarea
+          placeholder="Contenido del artículo"
+          value={blogContent}
+          onChange={(e) => setBlogContent(e.target.value)}
+          rows={5}
+          className="w-full p-2 mt-2 border border-gray-400 rounded-md"
+        />
+        <button
+          onClick={handlePostBlog}
+          className="bg-green-600 text-white py-2 px-4 mt-4 rounded-md hover:bg-green-700 transition"
+        >
+          Publicar
+        </button>
+      
+        {/* ✅ Display Published Articles */}
+        <h2 className="text-xl font-bold mt-6">Artículos Publicados</h2>
+        {blogPosts.length === 0 ? (
+          <p className="text-gray-500 mt-2">No hay artículos publicados aún.</p>
+        ) : (
+          <ul className="mt-4 space-y-4">
+            {blogPosts.map((post) => (
+              <li key={post.id} className="bg-gray-800 p-4 rounded-md shadow-md text-white">
+                <h4 className="text-lg font-bold">{post.title}</h4>
+                <p className="text-sm text-gray-400">
+                  Publicado el{" "}
+                  {new Date(post.date).toLocaleDateString("es-MX", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className="text-gray-300 mt-2">{post.content.slice(0, 100)}...</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      
       )}
     </div>
   );
