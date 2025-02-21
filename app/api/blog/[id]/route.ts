@@ -14,19 +14,20 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Corrected function signature
+// ✅ Corrected function signature for Next.js App Router
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } } // 🔥 Ensure `id` is required
+  context: { params: { id: string } } // ✅ Use `context` instead of destructuring
 ) {
   try {
-    // Ensure ID is provided
-    if (!params || !params.id) {
+    const { id } = context.params; // ✅ Extract `id` properly
+
+    if (!id) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
 
     // Convert ID from string to number
-    const requestedId = Number(params.id);
+    const requestedId = Number(id);
     if (isNaN(requestedId)) {
       return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
     }
@@ -47,7 +48,7 @@ export async function GET(
     }
 
     console.log("🔍 Searching for post with ID:", requestedId);
-    console.log("📝 Available IDs in Redis:", articles.map(a => a.id));
+    console.log("📝 Available IDs in Redis:", articles.map((a) => a.id));
 
     // Find post by ID
     const post = articles.find((article) => article.id === requestedId);
@@ -61,6 +62,9 @@ export async function GET(
     return NextResponse.json(post, { status: 200 });
   } catch (error) {
     console.error("Error fetching blog post:", error);
-    return NextResponse.json({ error: "Failed to fetch blog post" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch blog post" },
+      { status: 500 }
+    );
   }
 }
