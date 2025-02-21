@@ -14,16 +14,17 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Fully Typed Function
-export async function GET(req: NextRequest, context: { params: { id?: string } }) {
+// ✅ Fix: Use `Record<string, string>` for params to avoid deployment issues
+export async function GET(req: NextRequest, { params }: { params: Record<string, string> }) {
   try {
-    const postId = context.params?.id;
+    const postId = params.id;
 
     if (!postId) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
 
     const articlesData = await redis.get("blog:articles");
+
     if (!articlesData) {
       return NextResponse.json({ error: "No articles found" }, { status: 404 });
     }
