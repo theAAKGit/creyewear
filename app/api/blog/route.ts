@@ -5,20 +5,20 @@ import { NextRequest, NextResponse } from "next/server";
 const redis = Redis.fromEnv();
 
 interface BlogArticle {
-  id: string; // ✅ Ensure ID is stored as a string in Redis
+  id: string;
   title: string;
   content: string;
   excerpt: string;
   author: string;
   date: string;
-  image?: string;
+  image?: string; // Optional thumbnail
 }
 
 // ✅ GET all articles
 export async function GET() {
   try {
     const articlesData = await redis.get("blog:articles");
-
+    
     let articles: BlogArticle[] = [];
 
     if (typeof articlesData === "string") {
@@ -38,9 +38,6 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const newArticle: BlogArticle = await req.json();
-
-    // Ensure ID is a string
-    newArticle.id = String(newArticle.id);
 
     // Fetch existing articles
     const articlesData = await redis.get("blog:articles");

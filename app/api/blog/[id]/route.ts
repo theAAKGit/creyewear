@@ -1,3 +1,5 @@
+
+/*
 import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,17 +16,16 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Fix: Use `Record<string, string>` for params to avoid deployment issues
-export async function GET(req: NextRequest, { params }: { params: Record<string, string> }) {
+// ✅ Fully Typed Function
+export async function GET(req: NextRequest, context: { params: { id?: string } }) {
   try {
-    const postId = params.id;
+    const postId = context.params?.id;
 
     if (!postId) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
 
     const articlesData = await redis.get("blog:articles");
-
     if (!articlesData) {
       return NextResponse.json({ error: "No articles found" }, { status: 404 });
     }
@@ -54,3 +55,4 @@ export async function GET(req: NextRequest, { params }: { params: Record<string,
     return NextResponse.json({ error: "Failed to fetch blog post" }, { status: 500 });
   }
 }
+*/
