@@ -14,12 +14,14 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Corrected function signature: Destructure `params` directly
+// ✅ Fix: Use `context` as the second argument and destructure `params`
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } } // 🔥 Fix: Destructure correctly
+  context: { params: { id: string } } // 🔥 Fix: Correctly structured second argument
 ): Promise<NextResponse> {
   try {
+    const { params } = context; // Extract `params` correctly
+
     // Ensure `id` is provided
     if (!params?.id) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
