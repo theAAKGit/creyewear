@@ -5,35 +5,29 @@ import { NextRequest, NextResponse } from "next/server";
 const redis = Redis.fromEnv();
 
 interface BlogArticle {
-  id: number;
+  id: string; // ✅ Fix: Ensure ID is string to match Next.js route params
   title: string;
   content: string;
-  excerpt?: string;
-  author?: string;
+  excerpt: string;
+  author: string;
   date: string;
   image?: string;
 }
 
-// ✅ Fix: Use `context` as the second argument and destructure `params`
+// ✅ GET a single blog post by ID
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } } // 🔥 Fix: Correctly structured second argument
-): Promise<NextResponse> {
+  context: { params: { id: string } } // ✅ Fix: Next.js expects `context` with `params`
+) {
   try {
-    const { params } = context; // Extract `params` correctly
+    const { params } = context;
 
-    // Ensure `id` is provided
-    if (!params?.id) {
+    // Ensure ID is provided
+    if (!params.id) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
 
-    // Convert ID from string to number
-    const requestedId = Number(params.id);
-    if (isNaN(requestedId)) {
-      return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
-    }
-
-    // Fetch articles from Redis
+    // Fetch all articles from Redis
     const articlesData = await redis.get("blog:articles");
 
     if (!articlesData) {
@@ -41,20 +35,21 @@ export async function GET(
     }
 
     let articles: BlogArticle[] = [];
+
     if (typeof articlesData === "string") {
       articles = JSON.parse(articlesData);
     } else if (Array.isArray(articlesData)) {
       articles = articlesData as BlogArticle[];
     }
 
-    console.log("🔍 Searching for post with ID:", requestedId);
-    console.log("📝 Available IDs in Redis:", articles.map((a) => a.id));
+    console.log("🔍 Searching for post with ID:", params.id);
+    console.log("📝 Available IDs in Redis:", articles.map(a => a.id));
 
-    // Find post by ID
-    const post = articles.find((article) => article.id === requestedId);
+    // ✅ Find post by string ID (not number)
+    const post = articles.find((article) => article.id === params.id);
 
     if (!post) {
-      console.log("❌ Post not found for ID:", requestedId);
+      console.log("❌ Post not found for ID:", params.id);
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
