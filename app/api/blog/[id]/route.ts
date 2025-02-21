@@ -5,32 +5,33 @@ import { NextRequest, NextResponse } from "next/server";
 const redis = Redis.fromEnv();
 
 interface BlogArticle {
-  id: number; // 🔥 Fix: Ensure ID is a number to match Redis
+  id: number;
   title: string;
   content: string;
   excerpt?: string;
   author?: string;
   date: string;
-  image?: string; // Optional thumbnail
+  image?: string;
 }
 
-// ✅ GET a single blog post by ID
+// ✅ Corrected function signature
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id?: string } }
+  { params }: { params: { id: string } } // 🔥 Ensure `id` is required
 ) {
   try {
-    if (!params.id) {
-      return NextResponse.json({ error: "Invalid request: Missing ID" }, { status: 400 });
+    // Ensure ID is provided
+    if (!params || !params.id) {
+      return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
 
-    // Convert ID from string to number to match Redis data
+    // Convert ID from string to number
     const requestedId = Number(params.id);
     if (isNaN(requestedId)) {
       return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
     }
 
-    // Fetch all articles from Redis
+    // Fetch articles from Redis
     const articlesData = await redis.get("blog:articles");
 
     if (!articlesData) {
@@ -48,7 +49,7 @@ export async function GET(
     console.log("🔍 Searching for post with ID:", requestedId);
     console.log("📝 Available IDs in Redis:", articles.map(a => a.id));
 
-    // ✅ Find the specific blog post by ID
+    // Find post by ID
     const post = articles.find((article) => article.id === requestedId);
 
     if (!post) {
