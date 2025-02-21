@@ -17,14 +17,15 @@ interface BlogArticle {
 // ✅ Corrected function signature for Next.js App Router
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } } // ✅ Use `context` instead of destructuring
+  context: { params?: { id?: string } } // ✅ Ensure `params` is optional and avoid direct destructuring
 ) {
   try {
-    const { id } = context.params; // ✅ Extract `id` properly
-
-    if (!id) {
+    // Ensure `params` exists before accessing `id`
+    if (!context.params || !context.params.id) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
+
+    const { id } = context.params; // ✅ Extract `id` safely
 
     // Convert ID from string to number
     const requestedId = Number(id);
