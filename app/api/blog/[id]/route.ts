@@ -14,10 +14,10 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Universal Fix: No More Type Conflicts
-export async function GET(req: NextRequest, context: any) {
+// ✅ Fully Typed Function
+export async function GET(req: NextRequest, context: { params: { id?: string } }) {
   try {
-    const postId = context?.params?.id; // 🔥 Handle undefined params safely
+    const postId = context.params?.id;
 
     if (!postId) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
