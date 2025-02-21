@@ -14,16 +14,19 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Correct Function Signature for Next.js API Routes
+// ✅ Correct function signature for Next.js App Router API Routes
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } } // 🔥 Ensures `params` is required & correctly typed
+  context: { params?: Record<string, string> } // 🔥 Fix: Ensure params is optional & flexible
 ): Promise<NextResponse> {
   try {
-    const { id } = context.params; // ✅ Extract `id` safely
+    // Ensure `params` exists & has `id`
+    if (!context.params || !context.params.id) {
+      return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
+    }
 
     // Convert ID from string to number
-    const requestedId = Number(id);
+    const requestedId = Number(context.params.id);
     if (isNaN(requestedId)) {
       return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
     }
@@ -36,7 +39,6 @@ export async function GET(
     }
 
     let articles: BlogArticle[] = [];
-
     if (typeof articlesData === "string") {
       articles = JSON.parse(articlesData);
     } else if (Array.isArray(articlesData)) {
