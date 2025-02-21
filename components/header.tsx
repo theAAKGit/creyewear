@@ -2,20 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+//import Image from "next/image";
 import { useCart } from "../context/CartContext"; // Import Cart Context
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
-  const [isClient, setIsClient] = useState(false);
+  //const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { cart, toggleCart } = useCart();
-
+/*
   useEffect(() => {
     setIsClient(true); // Ensures the component re-renders only on the client
   }, []);
-
+*/
   const categories = ["Hombre", "Mujer"];
 
   return (

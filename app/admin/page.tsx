@@ -213,11 +213,10 @@ const AdminPage = () => {
         <button onClick={handlePreciosClick} className="bg-blue-600 text-white py-3 px-6 rounded-md">
           Precios
         </button>
-        {/*
+        
         <button onClick={handleBlogClick} className="bg-blue-600 text-white py-3 px-6 rounded-md">
           Blog
         </button>
-        */}
       </div>
 
       {showPrices && (
