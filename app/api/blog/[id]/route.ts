@@ -14,19 +14,15 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Correct Next.js API Route Format
-export async function GET(
-  req: NextRequest,
-  context: { params?: Record<string, string> }
-) {
+// ✅ Universal Fix: No More Type Conflicts
+export async function GET(req: NextRequest, context: any) {
   try {
-    if (!context.params?.id) {
+    const postId = context?.params?.id; // 🔥 Handle undefined params safely
+
+    if (!postId) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
 
-    const requestedId = context.params.id;
-
-    // Fetch articles from Redis
     const articlesData = await redis.get("blog:articles");
     if (!articlesData) {
       return NextResponse.json({ error: "No articles found" }, { status: 404 });
@@ -39,21 +35,21 @@ export async function GET(
       articles = articlesData as BlogArticle[];
     }
 
-    console.log("🔍 Searching for post with ID:", requestedId);
+    console.log("🔍 Searching for post with ID:", postId);
     console.log("📝 Available IDs in Redis:", articles.map(a => a.id));
 
     // ✅ Find post by string ID
-    const post = articles.find((article) => article.id === requestedId);
+    const post = articles.find((article) => article.id === postId);
 
     if (!post) {
-      console.log("❌ Post not found for ID:", requestedId);
+      console.log("❌ Post not found for ID:", postId);
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     console.log("✅ Post found:", post);
     return NextResponse.json(post, { status: 200 });
   } catch (error) {
-    console.error("Error fetching blog post:", error);
+    console.error("🚨 Error fetching blog post:", error);
     return NextResponse.json({ error: "Failed to fetch blog post" }, { status: 500 });
   }
 }
