@@ -14,19 +14,19 @@ interface BlogArticle {
   image?: string;
 }
 
-// ✅ Correct function signature for Next.js App Router API Routes
+// ✅ Corrected function signature: Destructure `params` directly
 export async function GET(
   req: NextRequest,
-  context: { params?: Record<string, string> } // 🔥 Fix: Ensure params is optional & flexible
+  { params }: { params: { id: string } } // 🔥 Fix: Destructure correctly
 ): Promise<NextResponse> {
   try {
-    // Ensure `params` exists & has `id`
-    if (!context.params || !context.params.id) {
+    // Ensure `id` is provided
+    if (!params?.id) {
       return NextResponse.json({ error: "Missing blog post ID" }, { status: 400 });
     }
 
     // Convert ID from string to number
-    const requestedId = Number(context.params.id);
+    const requestedId = Number(params.id);
     if (isNaN(requestedId)) {
       return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
     }
