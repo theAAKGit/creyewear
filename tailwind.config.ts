@@ -9,30 +9,45 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)", // Custom CSS variables
-        foreground: "var(--foreground)", // Custom CSS variables
-        primary: "#19333F", // Add primary color
-        secondary: "#4B6B70", // Add secondary color
-        accent: "#34d399", // Accent color for buttons or highlights
-        lilac: "#dc56e0",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: "#19333F",
+        secondary: "#4B6B70",
+        accent: "#34d399",
       },
       fontFamily: {
-        sans: ['Arial', 'Helvetica', 'sans-serif'], // Default sans-serif stack
-        serif: ['Georgia', 'serif'], // Default serif stack
-        mono: ['Courier New', 'monospace'], // Default monospace stack
+        ripple: ["Ripple", "sans-serif"],
       },
       spacing: {
-        72: "18rem", // Custom spacing value
-        84: "21rem", // Custom spacing value
-        96: "24rem", // Custom spacing value
+        72: "18rem",
+        84: "21rem",
+        96: "24rem",
       },
       screens: {
-        'xs': '475px', // Extra small screens for finer control
+        xs: "475px",
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            ul: {
+              listStyleType: "disc", // ✅ Force bullet points to display properly
+              paddingLeft: "1.5rem",
+            },
+            ol: {
+              listStyleType: "decimal",
+              paddingLeft: "1.5rem",
+            },
+            li: {
+              marginBottom: "0.25rem", // ✅ Adjust spacing between bullet points
+            },
+          },
+        },
       },
     },
   },
   plugins: [
-    require("@tailwindcss/typography"), // For blog styling
-    require("@tailwindcss/forms"), // For better form styles
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
   ],
 } satisfies Config;
+

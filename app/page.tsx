@@ -8,9 +8,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const slides = [
-  { id: 1, text: "whatevr", image: "/images/philosophy.jpg" },
-  { id: 2, text: "whatever 1", image: "/images/wellness.jpg" },
-  { id: 3, text: "whatever 2", image: "/images/community.jpg" },
+  { id: 1, text: "whatevr", image: "/images/1.png" },
+  { id: 2, text: "whatever 1", image: "/images/2.png" },
+  { id: 3, text: "whatever 2", image: "/images/3.png" },
 ];
 
 export default function Home() {
@@ -91,38 +91,38 @@ export default function Home() {
               target="_blank"
             >
               <div className="flex flex-col items-center justify-center space-y-6">
-  <div className="w-full">
-    <label
-      htmlFor="mce-EMAIL"
-      className="block mb-2 text-sm text-gray-300 text-center"
-    >
-      Correo Electrónico <span className="text-red-500">*</span>
-    </label>
-    <input
-      type="email"
-      name="EMAIL"
-      id="mce-EMAIL"
-      className="w-full px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-      placeholder="Correo Electrónico"
-      required
-    />
-  </div>
-  <div className="w-full">
-    <label
-      htmlFor="mce-FNAME"
-      className="block mb-2 text-sm text-gray-300 text-center"
-    >
-      Nombre
-    </label>
-    <input
-      type="text"
-      name="FNAME"
-      id="mce-FNAME"
-      className="w-full px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-      placeholder="Nombre"
-    />
-  </div>
-</div>
+                <div className="w-full">
+                  <label
+                    htmlFor="mce-EMAIL"
+                    className="block mb-2 text-sm text-gray-300 text-center"
+                  >
+                    Correo Electrónico <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="EMAIL"
+                    id="mce-EMAIL"
+                    className="w-full px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    placeholder="Correo Electrónico"
+                    required
+                  />
+                </div>
+                <div className="w-full">
+                  <label
+                    htmlFor="mce-FNAME"
+                    className="block mb-2 text-sm text-gray-300 text-center"
+                  >
+                    Nombre
+                  </label>
+                  <input
+                    type="text"
+                    name="FNAME"
+                    id="mce-FNAME"
+                    className="w-full px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    placeholder="Nombre"
+                  />
+                </div>
+              </div>
 
 
               <div className="mt-8">

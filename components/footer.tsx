@@ -47,7 +47,6 @@ export default function Footer() {
               >
                 Admin
               </Link>
-              <li>algo mas</li>
             </li>
 
           </ul>

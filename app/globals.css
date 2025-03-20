@@ -4,13 +4,11 @@
 
 /* CSS Variables for Dark Mode */
 :root {
-  --background: #ffffff;
+  --background: white;
   --foreground: #171717;
   --primary: #1a73e8; /* Primary color */
   --secondary: #fbbc05; /* Secondary color */
   --accent: #34d399; /* Accent color */
-  --font-anonymous-pro: "Anonymous Pro", monospace;
-
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,15 +18,13 @@
     --primary: #2563eb; /* Adjusted for dark mode */
     --secondary: #facc15; /* Adjusted for dark mode */
     --accent: #22c55e; /* Adjusted for dark mode */
-    --font-anonymous-pro: "Anonymous Pro", monospace;
-
   }
 }
 
 /* Global Styles */
 body {
-  @apply font-sans text-foreground bg-background; /* Tailwind utilities for consistency */
-  font-family: var(--font-anonymous-pro);
+  font-family: var(--font-poppins), sans-serif;
+  @apply text-foreground bg-background;
   margin: 0;
   padding: 0;
   line-height: 1.6;
@@ -75,31 +71,6 @@ img {
   display: block;
 }
 
-/* Masonry Grid */
-.masonry-grid {
-  display: flex;
-  margin-left: -16px; /* Removes unwanted spacing */
-  width: 100%;
-}
-
-.masonry-column {
-  padding-left: 16px; /* Creates consistent spacing between columns */
-  background-clip: padding-box;
-  display: flex;
-  flex-direction: column;
-  gap: 16px; /* Adjust spacing between images */
-}
-
-/* Optional: Adjust Image Styling Inside Masonry */
-.masonry-item {
-  width: 100%;
-}
-
-.masonry-item img {
-  display: block;
-  border-radius: 8px; /* Rounded corners */
-}
-
 /* Swiper Customization */
 .swiper-container {
   @apply bg-transparent border-none p-0 m-0;
@@ -139,9 +110,6 @@ img {
     -webkit-transform: translate3d(0, 0, 0); /* Safari fix */
     backface-visibility: hidden; /* Chrome/Safari rendering improvement */
   }
-
-  
-
 }
 
 /* Additional Swiper Fixes for Edge Cases */
@@ -164,8 +132,6 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   @apply outline-none border-primary ring-1 ring-primary;
 }
-
-
 
 /* Footer Customization for Mobile */
 footer {
@@ -196,8 +162,6 @@ footer p, footer h3 {
   footer p {
     @apply text-sm;
   }
-
-  
 }
 
 /* Chrome-Specific Fixes for Carousel and Layout */

@@ -13,17 +13,17 @@ export default function Checkout() {
   const subtotal = cart.reduce((total, product) => total + Number(product.price) * product.quantity, 0);
 
   return (
-    <div className="bg-[#D4CDBB] text-white min-h-screen py-12">
+    <div className="bg-[white] text-white min-h-screen py-12">
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 lg:px-12">
         
         {/* LEFT COLUMN: Checkout Form */}
         <div className="h-[80vh] overflow-y-auto p-4 bg-gray-800 rounded-md flex flex-col">
           
-          {/* 📦 Delivery Details */}
+          {/* Delivery Details */}
           <h2 className="text-2xl font-bold mb-4">Datos de entrega</h2>
           <p className="mb-4 text-gray-300">¿Cómo te gustaría recibir tu pedido?</p>
 
-          {/* 🚚 Delivery Options */}
+          {/* Delivery Options */}
           <div className="space-y-4">
             <button
               onClick={() => setDeliveryMethod("home")}
@@ -54,7 +54,7 @@ export default function Checkout() {
             <input type="text" placeholder="Dirección" className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
           </div>
 
-          {/* 📧 Contact Info */}
+          {/* Contact Info */}
           <div className="mt-6">
             <h2 className="text-xl font-bold">Información de contacto</h2>
             <input type="email" placeholder="Correo electrónico" className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
@@ -65,7 +65,7 @@ export default function Checkout() {
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Pago</h2>
 
-            {/* 🏷️ Promo Code */}
+            {/* Promo Code */}
             <div className="mb-4">
               <label className="block text-gray-300 mb-2">¿Tienes un código promocional?</label>
               <input

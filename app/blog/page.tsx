@@ -7,6 +7,7 @@ interface Article {
   title: string;
   description: string;
   date: string;
+  image?: string; // ✅ Add image field
 }
 
 export default function Blog() {
@@ -65,17 +66,26 @@ export default function Blog() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Featured Post */}
           <div className="lg:col-span-2">
-            <a href={`/blog/${featuredPost.id}`} className="block group">
-              <h2 className="text-2xl font-bold mb-2 group-hover:text-primary transition">
-                {featuredPost.title}
-              </h2>
-              <p className="text-gray-700">{featuredPost.description}</p>
-            </a>
+          <a href={`/blog/${featuredPost.id}`} className="block group">
+  <h2 className="text-2xl font-bold mb-2 group-hover:text-primary transition text-black">
+    {featuredPost.title}
+  </h2>
+  {/* ✅ Add Image Below the Title */}
+  {sortedArticles[0]?.image && (
+    <img
+      src={sortedArticles[0].image}
+      alt={sortedArticles[0].title}
+      className="w-full h-64 object-cover rounded-md mb-2"
+    />
+  )}
+  <p className="text-gray-700">{featuredPost.description}</p>
+</a>
+
           </div>
 
           {/* Recent Posts */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Nuevos posts</h3>
+            <h3 className="text-xl font-bold mb-4 text-black">Nuevos posts</h3>
             <ul className="space-y-4">
               {recentPosts.map((post) => (
                 <li key={post.id}>
@@ -87,7 +97,7 @@ export default function Blog() {
                         day: "numeric",
                       })}
                     </p>
-                    <h4 className="text-lg font-medium group-hover:text-primary transition">
+                    <h4 className="text-lg font-medium group-hover:text-primary transition text-black">
                       {post.title}
                     </h4>
                   </a>

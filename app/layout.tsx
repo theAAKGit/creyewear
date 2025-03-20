@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
-import { Anonymous_Pro } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { CartProvider } from "../context/CartContext";
 import CartDrawer from "@/components/cartDrawer";
 
-
-
-const anonymousPro = Anonymous_Pro({
-  variable: "--font-anonymous-pro",
+const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "700"], // Regular & Bold
+  weight: ["300", "400", "700", "900"], // Light, Regular, Bold, Black
+  variable: "--font-poppins",
 });
 
 
+
 export const metadata: Metadata = {
-  title: "creyewear",
-  description: "Best eyewear",
+  title: "Creyewear e-commerce",
+  description: "Buy the best sunglasses.",
 };
 
 export default function RootLayout({
@@ -27,8 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${anonymousPro.variable} antialiased text-foreground bg-background flex flex-col min-h-screen`}>
-
+      <body
+      className={`${poppins.variable} antialiased text-foreground bg-background flex flex-col min-h-screen font-poppins`}
+      >
         <CartProvider>
         <CartDrawer />
         {/* Header for Navigation */}

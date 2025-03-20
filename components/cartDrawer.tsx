@@ -1,7 +1,6 @@
 "use client";
 
 import { useCart } from "../context/CartContext";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function CartDrawer() {
@@ -16,7 +15,7 @@ export default function CartDrawer() {
 >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
-        <h2 className="text-lg font-bold">Tu Carrito</h2>
+        <h2 className="text-lg font-bold text-black">Tu Carrito</h2>
         <button onClick={toggleCart} className="text-gray-600">&times;</button>
       </div>
 
@@ -27,7 +26,13 @@ export default function CartDrawer() {
         ) : (
           cart.map((product) => (
             <div key={product.id} className="flex items-center gap-4 border-b py-3">
-              <Image src={product.image} alt={product.name} width={50} height={50} className="rounded" />
+              <img 
+  src={product.image} 
+  alt={product.name} 
+  width={50} 
+  height={50} 
+  className="rounded" 
+/>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold">{product.name}</h3>
                 <p className="text-gray-600">${product.price}</p>

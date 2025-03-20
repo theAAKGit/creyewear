@@ -29,18 +29,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // ✅ Add product to cart
-  const addToCart = (product: Product) => {
+  const addToCart = (newProduct: Product & { quantity: number }) => {
     setCart((prevCart) => {
-      const existingProduct = prevCart.find((p) => p.id === product.id);
+      const existingProduct = prevCart.find((item) => item.id === newProduct.id);
+  
       if (existingProduct) {
-        return prevCart.map((p) =>
-          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
+        return prevCart.map((item) =>
+          item.id === newProduct.id
+            ? { ...item, quantity: item.quantity + newProduct.quantity } // ✅ Correctly update quantity
+            : item
         );
+      } else {
+        return [...prevCart, newProduct]; // ✅ Add new product with quantity
       }
-      return [...prevCart, { ...product, quantity: 1 }];
     });
-    setIsCartOpen(true);
-  };
+  };  
 
   // ✅ Remove product from cart
   const removeFromCart = (id: number) => {

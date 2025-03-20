@@ -31,12 +31,18 @@ export default function Header() {
 
 
       {/* Header */}
-      <header className="bg-[#e4e4e4] text-black font-semibold tracking-wide h-24 flex items-center">
+      <header className="bg-[#e4e4e4] text-black font-semibold tracking-wide h-32 flex items-center">
         <div className="container flex items-center justify-between py-4 relative">
 
-          {/* Logo (Text) */}
+          {/* Logo (Image) */}
           <Link href="/" className="flex items-center no-underline">
-            <span className="text-2xl font-bold text-black">Creyewear</span>
+            <img
+              src="/images/creyewearlogo.png" // ✅ Make sure the path is correct
+              alt="Creyewear Logo"
+              width={150} // ✅ Adjust size as needed
+              height={50} // ✅ Adjust size as needed
+              
+            />
           </Link>
 
           {/* Navigation */}
@@ -65,6 +71,7 @@ export default function Header() {
               )}
             </div>
             <Link href="/gallery" className="text-black hover:text-[#84AAAF] transition no-underline">Galería</Link>
+            <Link href="/blog" className="text-black hover:text-[#84AAAF] transition no-underline">Blog</Link>
           </nav>
 
           {/* Cart Icon */}
@@ -88,16 +95,17 @@ export default function Header() {
         </div>
 
         {/* Mobile Menu Drawer */}
-{isMenuOpen && (
-  <div className="fixed inset-0 bg-[#d5c6e0] bg-opacity-95 text-white flex flex-col items-center justify-center z-[100]">
-    <button className="absolute top-4 right-6 text-2xl" onClick={() => setIsMenuOpen(false)}>✖</button>
-    <ul className="text-lg space-y-6">
-      <li><Link href="/" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Menu principal</Link></li>
-      <li><Link href="/store" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Tienda</Link></li>
-      <li><Link href="/gallery" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Galería</Link></li>
-    </ul>
-  </div>
-)}
+        {isMenuOpen && (
+          <div className="fixed inset-0 bg-[#d5c6e0] bg-opacity-95 text-white flex flex-col items-center justify-center z-[100]">
+            <button className="absolute top-4 right-6 text-2xl" onClick={() => setIsMenuOpen(false)}>✖</button>
+            <ul className="text-lg space-y-6">
+              <li><Link href="/" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Menu principal</Link></li>
+              <li><Link href="/store" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Tienda</Link></li>
+              <li><Link href="/gallery" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Galería</Link></li>
+              <li><Link href="/blog" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Blog</Link></li>
+            </ul>
+          </div>
+        )}
       </header>
     </>
   );
