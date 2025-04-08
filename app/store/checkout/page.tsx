@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext"; // Import Cart Context
 import ClipButton from "@/components/clipButton";
-import PayPalButton from "@/components/paypalButton"; // PayPal Button Component
+//import PayPalButton from "@/components/paypalButton"; // PayPal Button Component
 
 export default function Checkout() {
   const { cart } = useCart(); // 🛒 Get cart items from context
