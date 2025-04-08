@@ -96,6 +96,18 @@ export default function Header() {
           </div>
         </div>
       </header>
+      {isMenuOpen && (
+  <div className="fixed inset-0 bg-[#d5c6e0] bg-opacity-95 text-white flex flex-col items-center justify-center z-[100]">
+    <button className="absolute top-4 right-6 text-2xl" onClick={() => setIsMenuOpen(false)}>✖</button>
+    <ul className="text-lg space-y-6">
+      <li><Link href="/" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Menu principal</Link></li>
+      <li><Link href="/store" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Tienda</Link></li>
+      <li><Link href="/gallery" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Galería</Link></li>
+      <li><Link href="/blog" className="text-[#4B6B70] hover:text-[#84AAAF] transition no-underline" onClick={() => setIsMenuOpen(false)}>Blog</Link></li>
+    </ul>
+  </div>
+)}
+
     </>
   );
 }
