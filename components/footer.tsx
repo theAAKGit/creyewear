@@ -13,32 +13,43 @@ export default function Footer() {
   if (!isMounted) return null; // Render nothing until hydration is complete.
 
   return (
-    <footer className="bg-[#2c72a6] text-white py-8">
-
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4">
-        {/* Contact Info */}
-        <div className="text-center md:text-left">
-          <h3 className="text-sm font-semibold md:text-lg">Contacto</h3>
-          <p className="text-xs md:text-sm">Teléfono: +52 (placeholder)</p>
-          <p className="text-xs md:text-sm">Correo: correo@placeholder.com</p>
+    <footer className="bg-[#d5c6e0] text-black py-6">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left px-6">
+        
+        {/* Left Column - Collections */}
+        <div className="w-1/3 flex flex-col items-center md:items-start">
+          <h3 className="text-black font-bold mb-2">Contact</h3>
+          <ul className="text-sm space-y-1">
+            <li>Placeholder cellphone</li>
+            <li>Placeholder email</li>
+          </ul>
         </div>
 
-        {/* Divider */}
-        <div className="hidden md:block h-px w-full bg-gray-700 md:hidden"></div>
+        {/* Center Column - Collaborations with Divider */}
+        <div className="w-1/3 flex flex-col items-center relative">
+          
+          <h3 className="text-black font-bold mb-2">Collections</h3>
+          <ul className="text-sm space-y-1">
+            <li>Collection 1</li>
+            <li>Collection 2</li>
+          </ul>
+        </div>
 
-        {/* Seal and Admin Link */}
-        <div className="text-center mt-2 md:mt-0">
- {/*   
-  <span className="ml-2">
-    <img src="/images/icon.png" alt="JRF Technologies" className="h-4 md:h-5" />
-  </span>
-*/}
-          <Link
-            href="/admin"
-            className="text-xs md:text-sm text-blue-400 hover:text-blue-300 mt-1 block"
-          >
-            Admin
-          </Link>
+        {/* Right Column - Reviews with Divider */}
+        <div className="w-1/3 flex flex-col items-center md:items-end">
+          
+          <h3 className="text-black font-bold mb-2">Admin</h3>
+          <ul className="text-sm space-y-1">
+            <li>
+              <Link
+                href="/admin"
+                
+              >
+                Admin
+              </Link>
+            </li>
+
+          </ul>
         </div>
       </div>
     </footer>

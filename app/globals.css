@@ -9,6 +9,7 @@
   --primary: #1a73e8; /* Primary color */
   --secondary: #fbbc05; /* Secondary color */
   --accent: #34d399; /* Accent color */
+  --font-anonymous-pro: "Anonymous Pro", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,12 +19,13 @@
     --primary: #2563eb; /* Adjusted for dark mode */
     --secondary: #facc15; /* Adjusted for dark mode */
     --accent: #22c55e; /* Adjusted for dark mode */
+    --font-anonymous-pro: "Anonymous Pro", monospace;
   }
 }
 
 /* Global Styles */
 body {
-  font-family: var(--font-poppins), sans-serif;
+  font-family: var(--font-anonymous-pro);
   @apply text-foreground bg-background;
   margin: 0;
   padding: 0;

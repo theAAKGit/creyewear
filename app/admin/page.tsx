@@ -25,7 +25,7 @@ const AdminPage = () => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
   const [editingPost, setEditingPost] = useState<Article | null>(null);
   const [blogImage, setBlogImage] = useState<string | null>(null);
-  const categories = ["aire", "agua", "descanso", "repuestos"];
+  const categories = ["mujer", "hombre"];
   const hardcodedPassword = "123";
 
   // Stable useEffect dependencies (track length, not entire array)
@@ -466,15 +466,13 @@ const handleSaveChanges = async () => {
                 className="w-full p-2 mt-2 border border-gray-600 rounded-md text-black"
               />
 
-<MultipleImagesUpload
-  onUpload={(urls) => {
-    console.log(`✅ Received uploaded image URLs for product ${product.id}:`, urls);
-    handleProductChange(product.id, "images", urls);
-  }}
-  currentImages={product.images || []}
-/>
-
-
+              <MultipleImagesUpload
+                onUpload={(urls) => {
+                  console.log(`✅ Received uploaded image URLs for product ${product.id}:`, urls);
+                  handleProductChange(product.id, "images", urls);
+                }}
+                currentImages={product.images || []}
+              />
 
               {/* Editable Sizes */}
               <div className="mt-2">

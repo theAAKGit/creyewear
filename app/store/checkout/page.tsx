@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext"; // Import Cart Context
+import ClipButton from "@/components/clipButton";
 import PayPalButton from "@/components/paypalButton"; // PayPal Button Component
 
 export default function Checkout() {
@@ -76,8 +77,17 @@ export default function Checkout() {
             </div>
 
             {/* ✅ Pass subtotal & cart items correctly to PayPal */}
-            <h2 className="text-xl font-bold mt-6">Pago con PayPal</h2>
-            <PayPalButton total={subtotal} cartItems={cart} />
+            <div className="mt-8">
+  <h2 className="text-2xl font-bold mb-4">Pago</h2>
+
+  {/* Clip Payment */}
+  <h2 className="text-xl font-bold mt-6">Pago con Clip</h2>
+  <ClipButton total={subtotal} />
+
+  {/* ✅ Pass subtotal & cart items correctly to PayPal */}
+  <h2 className="text-xl font-bold mt-6">Pago con PayPal</h2>
+  <PayPalButton total={subtotal} cartItems={cart} />
+</div>
           </div>
         </div>
 
