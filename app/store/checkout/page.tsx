@@ -78,16 +78,12 @@ export default function Checkout() {
 
             {/* ✅ Pass subtotal & cart items correctly to PayPal */}
             <div className="mt-8">
-  <h2 className="text-2xl font-bold mb-4">Pago</h2>
+            <h2 className="text-2xl font-bold mb-4">Pago</h2>
 
-  {/* Clip Payment */}
-  <h2 className="text-xl font-bold mt-6">Pago con Clip</h2>
-  <ClipButton total={subtotal} />
-
-  {/* ✅ Pass subtotal & cart items correctly to PayPal */}
-  <h2 className="text-xl font-bold mt-6">Pago con PayPal</h2>
-  <PayPalButton total={subtotal} cartItems={cart} />
-</div>
+            {/* Clip Payment */}
+            <h2 className="text-xl font-bold mt-6">Pago con Clip</h2>
+            <ClipButton total={subtotal} />
+          </div>
           </div>
         </div>
 

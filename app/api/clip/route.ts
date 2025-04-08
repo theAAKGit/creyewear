@@ -4,9 +4,9 @@ export async function POST(req: Request) {
   try {
     console.log("🔄 Initializing Clip payment link creation...");
 
-    const { CLIP_API, CLIP_SECRET, CLIP_ENDPOINT } = process.env;
+    const { CLIP_AUTH_TOKEN, CLIP_ENDPOINT } = process.env;
 
-    if (!CLIP_API || !CLIP_SECRET || !CLIP_ENDPOINT) {
+    if (!CLIP_AUTH_TOKEN || !CLIP_ENDPOINT) {
       console.error("🚨 Missing Clip environment variables");
       return NextResponse.json(
         { error: "Server configuration error: Missing Clip environment variables" },
@@ -23,10 +23,10 @@ export async function POST(req: Request) {
       currency: "MXN",
       purchase_description: data.description,
       redirection_url: {
-        success: "http://localhost:3000/store/checkout/redirection/success",
-        error: "http://localhost:3000/store/checkout/redirection/error",
-        default: "http://localhost:3000/store/checkout/redirection/default",
-      },      
+        success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
+        error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
+        default: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/default`,
+      },
     };
 
     console.log("🔗 Sending request to Clip API:", requestBody);
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       headers: {
         "accept": "application/json",
         "content-type": "application/json",
-        "Authorization": `Bearer ${CLIP_API}:${CLIP_SECRET}`,
+        "Authorization": `Basic ${CLIP_AUTH_TOKEN}`,
       },
       body: JSON.stringify(requestBody),
     });
@@ -55,17 +55,16 @@ export async function POST(req: Request) {
 
     return NextResponse.json(result, { status: 200 });
   } catch (error: unknown) {
-  let errorMessage = "An unexpected error occurred";
+    let errorMessage = "An unexpected error occurred";
 
-  if (error instanceof Error) {
-    errorMessage = error.message;
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    console.error("🚨 Error creating payment link:", errorMessage);
+    return NextResponse.json(
+      { error: "Failed to create payment link", details: errorMessage },
+      { status: 500 }
+    );
   }
-
-  console.error("🚨 Error creating payment link:", errorMessage);
-  return NextResponse.json(
-    { error: "Failed to create payment link", details: errorMessage },
-    { status: 500 }
-  );
-}
-
 }

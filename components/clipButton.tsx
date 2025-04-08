@@ -19,17 +19,16 @@ export default function ClipButton({ total }: { total: number }) {
 
       const data = await response.json();
 
-      if (data.url) {
-        window.location.href = data.url; // Redirect to Clip payment link
+      if (data.payment_request_url) {
+        window.location.href = data.payment_request_url; // Redirect to Clip payment link
       } else {
         alert("Error al generar el link de pago");
         console.error("Clip API error response:", data);
         if (data && data.error) {
-        console.error("Error from Clip API:", data.error);
+          console.error("Error from Clip API:", data.error);
         } else {
-        console.error("Unexpected response format from Clip API:", data);
+          console.error("Unexpected response format from Clip API:", data);
         }
-
       }
     } catch (error) {
       console.error("Error initiating payment:", error);
