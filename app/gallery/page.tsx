@@ -22,7 +22,7 @@ export default function Gallery() {
         {/* 1 - Big close up left image */}
         <div style={{ gridArea: "img1" }}>
           <Image
-            src="/images/1.png"
+            src="/images/h1.jpg"
             alt="1"
             width={800}
             height={1000}
@@ -33,7 +33,7 @@ export default function Gallery() {
         {/* 2 - Tall ski goggles */}
         <div style={{ gridArea: "img2" }}>
           <Image
-            src="/images/2.png"
+            src="/images/v1.jpg"
             alt="2"
             width={800}
             height={1000}
@@ -44,7 +44,7 @@ export default function Gallery() {
         {/* 3 - Woman with round glasses */}
         <div style={{ gridArea: "img3" }}>
           <Image
-            src="/images/3.png"
+            src="/images/v2.jpg"
             alt="3"
             width={500}
             height={500}
@@ -55,7 +55,7 @@ export default function Gallery() {
         {/* 4 - Pink glasses */}
         <div style={{ gridArea: "img4" }}>
           <Image
-            src="/images/4.png"
+            src="/images/v3.jpg"
             alt="4"
             width={500}
             height={500}
