@@ -1,10 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 
 export default function Gallery() {
+  const [selectedImage, setSelectedImage] = useState<null | { src: string; alt: string }>(null);
+
+  const images = [
+    { src: "/images/h1.jpg", alt: "Model wearing sunglasses" },
+    { src: "/images/v1.jpg", alt: "Ski goggles fashion" },
+    { src: "/images/v2.jpg", alt: "Classic round sunglasses" },
+    { src: "/images/v3.jpg", alt: "Pink translucent glasses" },
+    { src: "/images/5.png", alt: "Man wearing shades with cap" },
+    { src: "/images/6.png", alt: "Black sunglasses product" },
+    { src: "/images/7.png", alt: "Brown tortoiseshell sunglasses" },
+  ];
+
+  const handleOpen = (img: { src: string; alt: string }) => {
+    setSelectedImage(img);
+  };
+
+  const handleClose = () => {
+    setSelectedImage(null);
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto p-4">
+      {/* Gallery */}
       <div
         className="grid gap-4"
         style={{
@@ -19,83 +41,61 @@ export default function Gallery() {
           `,
         }}
       >
-        {/* 1 - Big close up left image */}
-        <div style={{ gridArea: "img1" }}>
-          <Image
-            src="/images/h1.jpg"
-            alt="1"
-            width={800}
-            height={1000}
-            className="w-full h-full object-cover shadow"
-          />
-        </div>
-
-        {/* 2 - Tall ski goggles */}
-        <div style={{ gridArea: "img2" }}>
-          <Image
-            src="/images/v1.jpg"
-            alt="2"
-            width={800}
-            height={1000}
-            className="w-full h-full object-cover shadow"
-          />
-        </div>
-
-        {/* 3 - Woman with round glasses */}
-        <div style={{ gridArea: "img3" }}>
-          <Image
-            src="/images/v2.jpg"
-            alt="3"
-            width={500}
-            height={500}
-            className="w-full h-full object-cover shadow"
-          />
-        </div>
-
-        {/* 4 - Pink glasses */}
-        <div style={{ gridArea: "img4" }}>
-          <Image
-            src="/images/v3.jpg"
-            alt="4"
-            width={500}
-            height={500}
-            className="w-full h-full object-cover shadow"
-          />
-        </div>
-
-        {/* 5 - Man with cap */}
-        <div style={{ gridArea: "img5" }}>
-          <Image
-            src="/images/5.png"
-            alt="5"
-            width={500}
-            height={500}
-            className="w-full h-full object-cover shadow"
-          />
-        </div>
-
-        {/* 6 - Black product sunglasses */}
-        <div style={{ gridArea: "img6" }}>
-          <Image
-            src="/images/6.png"
-            alt="6"
-            width={500}
-            height={500}
-            className="w-full h-full object-cover  shadow"
-          />
-        </div>
-
-        {/* 7 - Tortoiseshell product sunglasses */}
-        <div style={{ gridArea: "img7" }}>
-          <Image
-            src="/images/7.png"
-            alt="7"
-            width={500}
-            height={500}
-            className="w-full h-full object-cover shadow"
-          />
-        </div>
+        {images.map((img, index) => (
+          <div
+            key={index}
+            style={{ gridArea: `img${index + 1}` }}
+            onClick={() => handleOpen(img)}
+            className="cursor-pointer"
+          >
+            <Image
+              src={img.src}
+              alt={img.alt}
+              width={800}
+              height={1000}
+              className="w-full h-full object-cover shadow"
+            />
+          </div>
+        ))}
       </div>
+
+      {/* Modal */}
+      {selectedImage && (
+        <div className="fixed inset-0 bg-white flex flex-col md:flex-row items-center justify-center z-50 p-8 overflow-y-auto">
+          {/* Close Button */}
+          <button
+            onClick={handleClose}
+            className="absolute top-6 right-8 text-3xl font-bold text-black hover:scale-110 transition"
+          >
+            ✖
+          </button>
+
+          {/* Left Side - Text */}
+          <div className="w-full md:w-1/2 flex flex-col justify-center items-start space-y-6 p-8">
+            <div>
+              <h2 className="text-2xl font-bold text-black mb-4">Detalles</h2>
+              <ul className="text-black text-lg space-y-2">
+                <li><strong>Modelo:</strong> {selectedImage.alt.split(":")[0] || "Modelo Genérico"}</li>
+                <li><strong>Colección:</strong> Primavera-Verano 2025</li>
+                <li><strong>Material:</strong> Acetato Premium</li>
+                <li><strong>Descripción:</strong> {selectedImage.alt}</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Right Side - Image */}
+          <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+            <Image
+              src={selectedImage.src}
+              alt={selectedImage.alt}
+              width={450}    // <-- Control the image width here
+              height={550}   // <-- Control the image height here
+              className="object-contain max-w-full max-h-[calc(100vh-100px)]"
+              priority
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
