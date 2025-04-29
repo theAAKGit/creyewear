@@ -4,7 +4,6 @@ import { useState } from "react";
 interface ImageUploadProps {
   onUpload: (url: string) => void;
   currentImage?: string;
-  type?: "product" | "blog"; // ✅ Add type to distinguish between products and blogs
 }
 
 interface MultipleImagesUploadProps {
@@ -13,7 +12,7 @@ interface MultipleImagesUploadProps {
   type?: "product" | "blog";
 }
 
-const ImageUpload = ({ onUpload, currentImage, type = "product" }: ImageUploadProps) => {
+const ImageUpload = ({ onUpload, currentImage }: ImageUploadProps) => {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(currentImage || "");
   const [file, setFile] = useState<File | null>(null);
@@ -35,7 +34,7 @@ const ImageUpload = ({ onUpload, currentImage, type = "product" }: ImageUploadPr
     formData.append("file", file);
 
     try {
-      const endpoint = type === "product" ? "/api/products" : "/api/blog-upload";
+      const endpoint = "/api/blog"; // 👈 Blog image uploads should go to /api/blog directly
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
@@ -183,3 +182,5 @@ const MultipleImagesUpload = ({ onUpload, currentImages = [] }: MultipleImagesUp
 };
 
 export { ImageUpload, MultipleImagesUpload };
+
+
