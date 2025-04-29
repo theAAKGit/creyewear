@@ -61,41 +61,45 @@ export default function Gallery() {
 
       {/* Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-white flex flex-col md:flex-row items-center justify-center z-50 p-8 overflow-y-auto">
-          {/* Close Button */}
-          <button
-            onClick={handleClose}
-            className="absolute top-6 right-8 text-3xl font-bold text-black hover:scale-110 transition"
-          >
-            ✖
-          </button>
+  <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+    {/* ✖ Close Button */}
+    <button
+      onClick={handleClose}
+      className="absolute top-4 right-4 z-50 text-3xl font-bold text-black hover:scale-110 transition"
+    >
+      ✖
+    </button>
 
-          {/* Left Side - Text */}
-          <div className="w-full md:w-1/2 flex flex-col justify-center items-start space-y-6 p-8">
-            <div>
-              <h2 className="text-2xl font-bold text-black mb-4">Detalles</h2>
-              <ul className="text-black text-lg space-y-2">
-                <li><strong>Modelo:</strong> {selectedImage.alt.split(":")[0] || "Modelo Genérico"}</li>
-                <li><strong>Colección:</strong> Primavera-Verano 2025</li>
-                <li><strong>Material:</strong> Acetato Premium</li>
-                <li><strong>Descripción:</strong> {selectedImage.alt}</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Right Side - Image */}
-          <div className="w-full md:w-1/2 flex items-center justify-center p-8">
-            <Image
-              src={selectedImage.src}
-              alt={selectedImage.alt}
-              width={450}    // <-- Control the image width here
-              height={550}   // <-- Control the image height here
-              className="object-contain max-w-full max-h-[calc(100vh-100px)]"
-              priority
-            />
-          </div>
+    {/* Modal Content */}
+    <div className="min-h-[100vh] flex flex-col md:flex-row justify-start items-stretch pt-20 md:pt-8 pb-16 px-6 md:px-16 gap-8">
+      {/* Left Side - Text */}
+      <div className="w-full md:w-1/2 flex flex-col justify-start items-start space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold text-black mb-4">Detalles</h2>
+          <ul className="text-black text-lg space-y-2">
+            <li><strong>Modelo:</strong> {selectedImage.alt.split(":")[0] || "Modelo Genérico"}</li>
+            <li><strong>Colección:</strong> Primavera-Verano 2025</li>
+            <li><strong>Material:</strong> Acetato Premium</li>
+            <li><strong>Descripción:</strong> {selectedImage.alt}</li>
+          </ul>
         </div>
-      )}
+      </div>
+
+      {/* Right Side - Image */}
+      <div className="w-full md:w-1/2 flex justify-center items-center">
+        <Image
+          src={selectedImage.src}
+          alt={selectedImage.alt}
+          width={450}  // ⬅️ control size here
+          height={550}
+          className="object-contain max-w-full"
+          priority
+        />
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
