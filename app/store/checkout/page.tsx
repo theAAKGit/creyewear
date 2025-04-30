@@ -65,7 +65,7 @@ export default function Checkout() {
           <div className="mt-6">
             <h2 className="text-xl font-bold">Información de contacto</h2>
             <input type="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
-            <input type="tel" placeholder="Número de teléfono" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
+            <input type="tel" placeholder="Número de teléfono" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
           </div>
 
           {/* 💳 Payment Section */}
