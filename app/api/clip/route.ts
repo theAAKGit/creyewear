@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const requestBody = {
       amount: data.amount,
       currency: "MXN",
-      purchase_description: data.description,
+      purchase_description: encodedCustomer,
       merch_inv_id: encodedCustomer, // 🔐 Embed customer info
       redirection_url: {
         success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       },
       webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
     };
-    
+
     console.log("🔗 Webhook URL sent to Clip:", requestBody.webhook_url);
 
     const response = await fetch(CLIP_ENDPOINT, {

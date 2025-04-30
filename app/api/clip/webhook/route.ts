@@ -9,15 +9,18 @@ export async function POST(req: NextRequest) {
     console.log("🚨 Clip webhook endpoint was triggered");
     console.log("📩 Webhook body:", JSON.stringify(body, null, 2));
 
-    const encoded = body?.payment_detail?.merch_inv_id;
+  
     const status = body?.payment_detail?.status_description || "N/A";
 
+    const encoded = body?.payment_request_detail?.purchase_description;
+
     if (!encoded) {
-      console.warn("⚠️ No customer data found in merch_inv_id");
+      console.warn("⚠️ No encoded customer info found in purchase_description");
       return NextResponse.json({ message: "Missing customer info" }, { status: 200 });
     }
 
     const customer = JSON.parse(Buffer.from(encoded, "base64").toString("utf-8"));
+
 
     const summary = `
       👤 Cliente: ${customer.name} ${customer.lastname}
