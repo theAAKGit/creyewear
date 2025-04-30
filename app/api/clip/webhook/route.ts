@@ -6,6 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    console.log("🚨 Clip webhook endpoint was triggered");
     console.log("📩 Webhook body:", JSON.stringify(body, null, 2));
 
     const encoded = body?.payment_detail?.merch_inv_id;
