@@ -21,10 +21,13 @@ export async function POST(req: Request) {
     const data = await req.json();
     console.log("📦 Received payment data:", data);
 
+    const orderId = `order_${Date.now()}`; // Custom internal order ID
+
     const requestBody = {
       amount: data.amount,
       currency: "MXN",
       purchase_description: data.description,
+      merch_inv_id: orderId, // Custom ID for later lookup
       redirection_url: {
         success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
         error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
@@ -57,13 +60,13 @@ export async function POST(req: Request) {
     const result = await response.json();
     console.log("✅ Payment link created successfully:", result);
 
-    // Save the payment_request_id -> customer mapping in Redis
     const paymentId = result.payment_request_id;
+
     if (paymentId && data.customer) {
-      await redis.set(`clip:${paymentId}`, JSON.stringify(data.customer), { ex: 3600 }); // expires in 1 hour
-      console.log("💾 Saved customer info in Redis for:", paymentId);
-    } else {
-      console.warn("⚠️ Missing payment_request_id or customer info, not saving to Redis.");
+      const customerString = JSON.stringify(data.customer);
+      await redis.set(`clip:payment:${paymentId}`, customerString, { ex: 3600 });
+      await redis.set(`clip:order:${orderId}`, customerString, { ex: 3600 });
+      console.log("💾 Saved customer info in Redis for:", paymentId, "and", orderId);
     }
 
     return NextResponse.json(result, { status: 200 });

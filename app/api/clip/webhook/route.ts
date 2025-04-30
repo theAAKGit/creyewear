@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 import { Redis } from "@upstash/redis";
+import { Resend } from "resend";
 
-// Initialize Redis
 const redis = Redis.fromEnv();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -11,22 +10,29 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     console.log("📩 Raw webhook body:", JSON.stringify(data, null, 2));
 
-    const status = data?.resource_status;
+    const status = data?.status || data?.resource_status;
     const paymentId = data?.payment_request_id;
+    const transactionId = data?.transaction_id;
+    const orderId = data?.merch_inv_id;
 
-    if (!paymentId) {
-      console.warn("⚠️ Webhook missing payment_request_id");
-      return NextResponse.json({ message: "No payment_request_id in webhook" }, { status: 200 });
+    let customerRaw: string | null = null;
+
+    if (paymentId) {
+      customerRaw = await redis.get(`clip:payment:${paymentId}`);
+    }
+    if (!customerRaw && orderId) {
+      customerRaw = await redis.get(`clip:order:${orderId}`);
+    }
+    if (!customerRaw && transactionId) {
+      customerRaw = await redis.get(`clip:payment:${transactionId}`);
     }
 
-    const customerRaw = await redis.get(`clip:${paymentId}`);
-
     if (!customerRaw) {
-      console.warn("⚠️ No customer info found in Redis for:", paymentId);
+      console.warn("⚠️ No customer info found in Redis for any ID");
       return NextResponse.json({ message: "No customer data found" }, { status: 200 });
     }
 
-    const customer = JSON.parse(customerRaw as string);
+    const customer = JSON.parse(customerRaw);
 
     const subject = `🧾 Nueva transacción ${status} en Creyewear`;
     const summary = `
@@ -36,7 +42,7 @@ export async function POST(req: NextRequest) {
       📱 Teléfono: ${customer.phone}
 
       💳 Estatus del pago: ${status}
-      🧾 ID de transacción: ${data.transaction_id || "N/A"}
+      🧾 ID de transacción: ${transactionId || "N/A"}
       📅 Fecha: ${data.payment_date || data.sent_date || "N/A"}
     `;
 
@@ -47,7 +53,7 @@ export async function POST(req: NextRequest) {
       text: summary,
     });
 
-    console.log("📧 Email sent for transaction:", data.transaction_id);
+    console.log("✅ Email sent for transaction:", transactionId);
 
     return NextResponse.json({ message: "Email sent & webhook processed" }, { status: 200 });
   } catch (error) {
