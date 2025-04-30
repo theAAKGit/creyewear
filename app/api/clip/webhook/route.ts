@@ -6,17 +6,15 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    console.log("🔔 Clip webhook received:", data);
+    console.log("📩 Raw webhook body:", JSON.stringify(data, null, 2));
 
     const status = data?.resource_status;
-    const reference = data?.me_reference_id;
+    const customer = data?.metadata?.customer;
 
-    if (!reference) {
-      console.warn("⚠️ Missing customer info in me_reference_id");
+    if (!customer) {
+      console.warn("⚠️ Missing customer info in metadata.customer");
       return NextResponse.json({ message: "No customer info provided" }, { status: 200 });
     }
-
-    const customer = JSON.parse(reference); // The object we embedded earlier
 
     const subject = `🧾 Nueva transacción ${status} en Creyewear`;
     const summary = `
@@ -30,7 +28,6 @@ export async function POST(req: NextRequest) {
       📅 Fecha: ${data.payment_date || data.sent_date || "N/A"}
     `;
 
-    // Send email via Resend
     await resend.emails.send({
       from: "notificaciones@creyewear.com",
       to: "jrf2421@gmail.com",
