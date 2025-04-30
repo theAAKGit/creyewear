@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { Redis } from "@upstash/redis";
 
+// Initialize Redis
+const redis = Redis.fromEnv();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
@@ -9,12 +12,21 @@ export async function POST(req: NextRequest) {
     console.log("📩 Raw webhook body:", JSON.stringify(data, null, 2));
 
     const status = data?.resource_status;
-    const customer = data?.metadata?.customer;
+    const paymentId = data?.payment_request_id;
 
-    if (!customer) {
-      console.warn("⚠️ Missing customer info in metadata.customer");
-      return NextResponse.json({ message: "No customer info provided" }, { status: 200 });
+    if (!paymentId) {
+      console.warn("⚠️ Webhook missing payment_request_id");
+      return NextResponse.json({ message: "No payment_request_id in webhook" }, { status: 200 });
     }
+
+    const customerRaw = await redis.get(`clip:${paymentId}`);
+
+    if (!customerRaw) {
+      console.warn("⚠️ No customer info found in Redis for:", paymentId);
+      return NextResponse.json({ message: "No customer data found" }, { status: 200 });
+    }
+
+    const customer = JSON.parse(customerRaw as string);
 
     const subject = `🧾 Nueva transacción ${status} en Creyewear`;
     const summary = `
@@ -35,8 +47,9 @@ export async function POST(req: NextRequest) {
       text: summary,
     });
 
-    return NextResponse.json({ message: "Email sent & webhook processed" }, { status: 200 });
+    console.log("📧 Email sent for transaction:", data.transaction_id);
 
+    return NextResponse.json({ message: "Email sent & webhook processed" }, { status: 200 });
   } catch (error) {
     console.error("❌ Error in Clip webhook:", error);
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });

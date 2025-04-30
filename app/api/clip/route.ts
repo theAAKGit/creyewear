@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import { Redis } from "@upstash/redis";
+
+// Initialize Redis
+const redis = Redis.fromEnv();
 
 export async function POST(req: Request) {
   try {
@@ -17,7 +21,6 @@ export async function POST(req: Request) {
     const data = await req.json();
     console.log("📦 Received payment data:", data);
 
-    // Create the request body as specified by the Clip API
     const requestBody = {
       amount: data.amount,
       currency: "MXN",
@@ -28,11 +31,7 @@ export async function POST(req: Request) {
         default: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/default`,
       },
       webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
-      metadata: {
-        customer: data.customer, // 👈 try this instead
-      },
     };
-     
 
     console.log("🔗 Sending request to Clip API:", requestBody);
 
@@ -58,17 +57,21 @@ export async function POST(req: Request) {
     const result = await response.json();
     console.log("✅ Payment link created successfully:", result);
 
-    return NextResponse.json(result, { status: 200 });
-  } catch (error: unknown) {
-    let errorMessage = "An unexpected error occurred";
-
-    if (error instanceof Error) {
-      errorMessage = error.message;
+    // Save the payment_request_id -> customer mapping in Redis
+    const paymentId = result.payment_request_id;
+    if (paymentId && data.customer) {
+      await redis.set(`clip:${paymentId}`, JSON.stringify(data.customer), { ex: 3600 }); // expires in 1 hour
+      console.log("💾 Saved customer info in Redis for:", paymentId);
+    } else {
+      console.warn("⚠️ Missing payment_request_id or customer info, not saving to Redis.");
     }
 
-    console.error("🚨 Error creating payment link:", errorMessage);
+    return NextResponse.json(result, { status: 200 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unexpected error";
+    console.error("🚨 Error creating payment link:", message);
     return NextResponse.json(
-      { error: "Failed to create payment link", details: errorMessage },
+      { error: "Failed to create payment link", details: message },
       { status: 500 }
     );
   }
