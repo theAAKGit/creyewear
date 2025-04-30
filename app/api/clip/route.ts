@@ -6,6 +6,7 @@ const redis = Redis.fromEnv();
 export async function POST(req: Request) {
   try {
     const { CLIP_AUTH_TOKEN, CLIP_ENDPOINT } = process.env;
+
     if (!CLIP_AUTH_TOKEN || !CLIP_ENDPOINT) {
       console.error("🚨 Missing Clip environment variables");
       return NextResponse.json({ error: "Missing config" }, { status: 500 });
@@ -13,6 +14,11 @@ export async function POST(req: Request) {
 
     const data = await req.json();
     const internalOrderId = `order_${Date.now()}`;
+    const customer = data.customer;
+
+    if (!customer || !customer.phone) {
+      return NextResponse.json({ error: "Missing customer or phone number" }, { status: 400 });
+    }
 
     const requestBody = {
       amount: data.amount,
@@ -43,14 +49,18 @@ export async function POST(req: Request) {
     }
 
     const paymentCode = result.payment_request_code;
-    const customer = data.customer;
     const customerString = JSON.stringify(customer);
 
-    if (paymentCode && customer) {
-      await redis.set(`clip:code:${paymentCode}`, customerString, { ex: 3600 });
-      await redis.set(`clip:order:${internalOrderId}`, customerString, { ex: 3600 });
-      console.log("💾 Saved to Redis keys:", `clip:code:${paymentCode}`, `clip:order:${internalOrderId}`);
+    await redis.hset("clients", { [customer.phone]: customerString });
+
+    if (paymentCode) {
+      await redis.hset("clip:lookup", { [paymentCode]: customer.phone });
     }
+    await redis.hset("clip:lookup", { [internalOrderId]: customer.phone });
+
+
+    console.log("💾 Stored customer under phone:", customer.phone);
+    console.log("🔗 Linked IDs to phone:", paymentCode, internalOrderId);
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {

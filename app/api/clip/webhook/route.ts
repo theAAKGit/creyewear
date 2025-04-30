@@ -14,17 +14,26 @@ export async function POST(req: NextRequest) {
     const orderId = body?.payment_detail?.order_id;
     const code = body?.payment_request_detail?.payment_request_code;
 
-    let customerRaw = null;
+    // Step 1: Get phone from clip:lookup
+    let phone: string | null = null;
 
     if (code) {
-      customerRaw = await redis.get(`clip:code:${code}`);
+      phone = await redis.hget("clip:lookup", code);
     }
-    if (!customerRaw && orderId) {
-      customerRaw = await redis.get(`clip:order:${orderId}`);
+    if (!phone && orderId) {
+      phone = await redis.hget("clip:lookup", orderId);
     }
 
+    if (!phone) {
+      console.warn("⚠️ No phone found in clip:lookup for code/orderId");
+      return NextResponse.json({ message: "Customer not found" }, { status: 200 });
+    }
+
+    // Step 2: Get customer data using phone from clients hash
+    const customerRaw = await redis.hget("clients", phone);
+
     if (!customerRaw) {
-      console.warn("⚠️ No customer info found in Redis for code/order_id");
+      console.warn("⚠️ Phone found but customer data missing:", phone);
       return NextResponse.json({ message: "No customer data found" }, { status: 200 });
     }
 
@@ -48,10 +57,10 @@ export async function POST(req: NextRequest) {
       text: summary,
     });
 
-    console.log("✅ Email sent successfully.");
-    return NextResponse.json({ message: "Webhook processed" }, { status: 200 });
+    console.log("✅ Email sent to notify new transaction from", customer.phone);
+    return NextResponse.json({ message: "Email sent & webhook processed" }, { status: 200 });
   } catch (err) {
-    console.error("❌ Error in webhook handler:", err);
-    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
+    console.error("❌ Webhook processing error:", err);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
