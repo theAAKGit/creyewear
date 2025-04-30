@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
     try {
       await resend.emails.send({
-        from: "notificaciones@creyewear.com",
+        from: "jrf2421@gmail.com",
         to: "jrf2421@gmail.com",
         subject: `🧾 Nueva orden en Creyewear`,
         text: summary,
