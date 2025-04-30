@@ -1,7 +1,21 @@
 "use client";
 import { useState } from "react";
 
-export default function ClipButton({ total }: { total: number }) {
+interface CustomerInfo {
+  name: string;
+  lastname: string;
+  address: string;
+  email: string;
+  phone: string;
+}
+
+export default function ClipButton({
+  total,
+  customer,
+}: {
+  total: number;
+  customer: CustomerInfo;
+}) {
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
@@ -13,6 +27,7 @@ export default function ClipButton({ total }: { total: number }) {
         body: JSON.stringify({
           amount: total,
           description: "Compra en Creyewear",
+          customer, 
           orderId: `order_${Date.now()}`,
         }),
       });

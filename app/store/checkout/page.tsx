@@ -7,11 +7,17 @@ import ClipButton from "@/components/clipButton";
 //import PayPalButton from "@/components/paypalButton"; // PayPal Button Component
 
 export default function Checkout() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const { cart } = useCart(); // 🛒 Get cart items from context
   const [deliveryMethod, setDeliveryMethod] = useState("home");
 
   // ✅ Ensure `subtotal` correctly calculates total price
   const subtotal = cart.reduce((total, product) => total + Number(product.price) * product.quantity, 0);
+  
 
   return (
     <div className="bg-[white] text-white min-h-screen py-12">
@@ -50,16 +56,16 @@ export default function Checkout() {
           {/* 📜 Name & Address */}
           <div className="mt-6">
             <h2 className="text-xl font-bold">Ingresa tu nombre y dirección:</h2>
-            <input type="text" placeholder="Nombre" className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
-            <input type="text" placeholder="Apellido" className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
-            <input type="text" placeholder="Dirección" className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
+            <input type="text" placeholder="Nombre" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
+            <input type="text" placeholder="Apellido" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
+            <input type="text" placeholder="Dirección" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
           </div>
 
           {/* Contact Info */}
           <div className="mt-6">
             <h2 className="text-xl font-bold">Información de contacto</h2>
-            <input type="email" placeholder="Correo electrónico" className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
-            <input type="tel" placeholder="Número de teléfono" className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
+            <input type="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
+            <input type="tel" placeholder="Número de teléfono" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
           </div>
 
           {/* 💳 Payment Section */}
@@ -82,7 +88,17 @@ export default function Checkout() {
 
             {/* Clip Payment */}
             <h2 className="text-xl font-bold mt-6">Pago con Clip</h2>
-            <ClipButton total={subtotal} />
+            <ClipButton
+              total={subtotal}
+              customer={{
+                name: firstName,
+                lastname: lastName,
+                address,
+                email,
+                phone,
+              }}
+            />
+
           </div>
           </div>
         </div>

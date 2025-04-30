@@ -27,7 +27,9 @@ export async function POST(req: Request) {
         error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
         default: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/default`,
       },
-    };
+      webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip-webhook`, // ✅ Clip will notify here
+      me_reference_id: JSON.stringify(data.customer), // ✅ Embed delivery info for later use
+    };    
 
     console.log("🔗 Sending request to Clip API:", requestBody);
 
