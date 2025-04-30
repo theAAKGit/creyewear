@@ -12,18 +12,21 @@ export async function POST(req: Request) {
 
     const data = await req.json();
     const customer = data.customer;
+    const encodedCustomer = Buffer.from(JSON.stringify(customer)).toString("base64");
+
 
     const requestBody = {
       amount: data.amount,
       currency: "MXN",
-      purchase_description: "Compra en Creyewear",
+      purchase_description: encodedCustomer, // 🧠 This is what your webhook will decode
       redirection_url: {
         success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
         error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
         default: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/default`,
       },
-      webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`, // optional
+      webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
     };
+    
 
     const response = await fetch(CLIP_ENDPOINT, {
       method: "POST",
@@ -51,7 +54,7 @@ export async function POST(req: Request) {
 
     try {
       await resend.emails.send({
-        from: "jrf2421@gmail.com",
+        from: "onboarding@resend.dev",
         to: "a01024815@tec.mx",
         subject: `🧾 Nueva orden en Creyewear`,
         text: summary,
