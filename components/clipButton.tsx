@@ -19,8 +19,15 @@ export default function ClipButton({
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
+    
+    if (!customer.name || !customer.lastname || !customer.address || !customer.email || !customer.phone) {
+      alert("Por favor, completa todos los campos de entrega y contacto.");
+      return;
+    }
+    
     setLoading(true);
     try {
+      console.log("👤 Customer info being sent to API:", customer);
       const response = await fetch("/api/clip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
