@@ -10,15 +10,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing Clip config" }, { status: 500 });
     }
 
-    const data = await req.json();
-    const customer = data.customer;
-    const encodedCustomer = Buffer.from(JSON.stringify(customer)).toString("base64");
+    const { customer, cart, amount } = await req.json();
 
+    const payload = { customer, cart };
+    const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
 
     const requestBody = {
-      amount: data.amount,
+      amount,
       currency: "MXN",
-      purchase_description: encodedCustomer, // 🧠 This is what your webhook will decode
+      purchase_description: encodedPayload,
       redirection_url: {
         success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
         error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
@@ -26,7 +26,6 @@ export async function POST(req: Request) {
       },
       webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
     };
-    
 
     const response = await fetch(CLIP_ENDPOINT, {
       method: "POST",
@@ -43,14 +42,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Clip error", details: result }, { status: response.status });
     }
 
-    // ✅ Send email immediately
+    // ✅ Format products
+    const itemsList = cart.map(
+      (item: { name: any; quantity: any; }) => `• ${item.name} x${item.quantity}`
+    ).join("\n");
+
     const summary = `
-      👤 Cliente: ${customer.name} ${customer.lastname}
-      📬 Dirección: ${customer.address}
-      📧 Correo: ${customer.email}
-      📱 Teléfono: ${customer.phone}
-      💳 Monto: $${data.amount}
-    `;
+👤 Cliente: ${customer.name} ${customer.lastname}
+📬 Dirección: ${customer.address}
+📧 Correo: ${customer.email}
+📱 Teléfono: ${customer.phone}
+
+🧾 Productos:
+${itemsList}
+
+💳 Monto: $${amount}
+`;
 
     try {
       await resend.emails.send({
