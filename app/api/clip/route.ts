@@ -3,6 +3,27 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// ✅ Type Definitions
+type Customer = {
+  name: string;
+  lastname: string;
+  address: string;
+  email: string;
+  phone: string;
+};
+
+type CartItem = {
+  id: number;
+  name: string;
+  quantity: number;
+};
+
+type RequestPayload = {
+  customer: Customer;
+  cart: CartItem[];
+  amount: number;
+};
+
 export async function POST(req: Request) {
   try {
     const { CLIP_AUTH_TOKEN, CLIP_ENDPOINT } = process.env;
@@ -10,7 +31,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing Clip config" }, { status: 500 });
     }
 
-    const { customer, cart, amount } = await req.json();
+    const { customer, cart, amount }: RequestPayload = await req.json();
 
     const payload = { customer, cart };
     const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
@@ -42,16 +63,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Clip error", details: result }, { status: response.status });
     }
 
-    // ✅ Format products
-    const itemsList = cart.map(
-      (item: { name: any; quantity: any; }) => `• ${item.name} x${item.quantity}`
-    ).join("\n");
+    // 🧾 Format items list
+    const itemsList = cart
+      .map(({ name, quantity }) => `• ${name} x${quantity}`)
+      .join("\n");
 
     const summary = `
 👤 Cliente: ${customer.name} ${customer.lastname}
-📬 Dirección: ${customer.address}
 📧 Correo: ${customer.email}
 📱 Teléfono: ${customer.phone}
+📬 Dirección: ${customer.address}
 
 🧾 Productos:
 ${itemsList}
