@@ -16,7 +16,7 @@ export default function Header() {
     setIsClient(true); // Ensures the component re-renders only on the client
   }, []);
 */
-  const categories = ["Hombre", "Mujer"];
+  
 
   return (
     <>
@@ -56,18 +56,7 @@ export default function Header() {
                 <Link href="/store" className="text-black hover:text-[#84AAAF] transition no-underline">Tienda</Link>
                 {isDropdownOpen && (
                   <div className="absolute left-0 top-full bg-[#19333F] rounded shadow-md w-40 z-50">
-                    <ul className="py-2">
-                      {categories.map((category) => (
-                        <li key={category}>
-                          <Link
-                            href={`/store?category=${category.toLowerCase()}`}
-                            className="block px-4 py-2 text-[white] hover:text-[#84AAAF] transition no-underline"
-                          >
-                            {category}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                   
                   </div>
                 )}
               </div>
