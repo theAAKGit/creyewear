@@ -18,8 +18,11 @@ export async function POST(req: Request) {
       address: customer.address,
       email: customer.email,
       phone: customer.phone,
-      cart: data.cart.map((p: any) => ({ name: p.name, quantity: p.quantity })),
-    };
+      cart: (data.cart as { name: string; quantity: number }[]).map((p) => ({
+        name: p.name,
+        quantity: p.quantity,
+      })),
+          };
     
     
     const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
