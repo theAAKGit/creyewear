@@ -14,6 +14,14 @@ export default function Checkout() {
   const [phone, setPhone] = useState("");
   const { cart } = useCart(); // 🛒 Get cart items from context
   const [deliveryMethod, setDeliveryMethod] = useState("home");
+  const [street, setStreet] = useState("");
+const [extNumber, setExtNumber] = useState("");
+const [intNumber, setIntNumber] = useState("");
+const [colonia, setColonia] = useState("");
+const [municipio, setMunicipio] = useState("");
+const [estado, setEstado] = useState("");
+const [postalCode, setPostalCode] = useState("");
+
 
   // ✅ Ensure `subtotal` correctly calculates total price
   const subtotal = cart.reduce((total, product) => total + Number(product.price) * product.quantity, 0);
@@ -38,7 +46,7 @@ export default function Checkout() {
                 deliveryMethod === "home" ? "border-[#84AAAF] bg-[#4B6B70]" : "border-gray-500"
               }`}
             >
-              <span className="flex items-center gap-2">📦 Entrega en domicilio</span>
+              <span className="flex items-center gap-2">Entrega en domicilio</span>
               {deliveryMethod === "home" && <span className="text-green-400">✔</span>}
             </button>
 
@@ -58,7 +66,62 @@ export default function Checkout() {
             <h2 className="text-xl font-bold">Ingresa tu nombre y dirección:</h2>
             <input type="text" placeholder="Nombre" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
             <input type="text" placeholder="Apellido" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
-            <input type="text" placeholder="Dirección" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]" />
+            <input
+  type="text"
+  placeholder="Calle"
+  value={street}
+  onChange={(e) => setStreet(e.target.value)}
+  className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400"
+/>
+
+<div className="flex gap-4 mt-2">
+  <input
+    type="text"
+    placeholder="Número ext."
+    value={extNumber}
+    onChange={(e) => setExtNumber(e.target.value)}
+    className="w-1/2 border rounded p-2 bg-gray-700 text-white placeholder-gray-400"
+  />
+  <input
+    type="text"
+    placeholder="Número int. (opcional)"
+    value={intNumber}
+    onChange={(e) => setIntNumber(e.target.value)}
+    className="w-1/2 border rounded p-2 bg-gray-700 text-white placeholder-gray-400"
+  />
+</div>
+
+<input
+  type="text"
+  placeholder="Colonia"
+  value={colonia}
+  onChange={(e) => setColonia(e.target.value)}
+  className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400"
+/>
+
+<input
+  type="text"
+  placeholder="Alcaldía o Municipio"
+  value={municipio}
+  onChange={(e) => setMunicipio(e.target.value)}
+  className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400"
+/>
+
+<input
+  type="text"
+  placeholder="Estado"
+  value={estado}
+  onChange={(e) => setEstado(e.target.value)}
+  className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400"
+/>
+
+<input
+  type="text"
+  placeholder="Código postal"
+  value={postalCode}
+  onChange={(e) => setPostalCode(e.target.value)}
+  className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400"
+/>
           </div>
 
           {/* Contact Info */}
@@ -70,35 +133,26 @@ export default function Checkout() {
 
           {/* 💳 Payment Section */}
           <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Pago</h2>
-
-            {/* Promo Code */}
-            <div className="mb-4">
-              <label className="block text-gray-300 mb-2">¿Tienes un código promocional?</label>
-              <input
-                type="text"
-                placeholder="Promoción"
-                className="w-full px-4 py-3 rounded-md bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#84AAAF]"
-              />
-            </div>
+            
 
             {/* ✅ Pass subtotal & cart items correctly to PayPal */}
             <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Pago</h2>
+            
 
             {/* Clip Payment */}
             <h2 className="text-xl font-bold mt-6">Pago con Clip</h2>
             <ClipButton
-  total={subtotal}
-  customer={{
-    name: firstName,
-    lastname: lastName,
-    address,
-    email,
-    phone,
-  }}
-  cart={cart.map((p) => ({ name: p.name, quantity: p.quantity }))}
-/>
+              total={subtotal}
+              customer={{
+                name: firstName,
+                lastname: lastName,
+                address: `${street}, No. ${extNumber}${intNumber ? ' Int. ' + intNumber : ''}, ${colonia}, ${municipio}, ${estado}, CP ${postalCode}`,
+
+                email,
+                phone,
+              }}
+              cart={cart.map((p) => ({ name: p.name, quantity: p.quantity }))}
+            />
 
 
 
