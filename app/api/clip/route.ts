@@ -5,45 +5,30 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
-    const { CLIP_AUTH_TOKEN, CLIP_ENDPOINT } = process.env;
-    if (!CLIP_AUTH_TOKEN || !CLIP_ENDPOINT) {
+    const { CLIP_AUTH_TOKEN, CLIP_ENDPOINT, NEXT_PUBLIC_BASE_URL } = process.env;
+    if (!CLIP_AUTH_TOKEN || !CLIP_ENDPOINT || !NEXT_PUBLIC_BASE_URL) {
       return NextResponse.json({ error: "Missing Clip config" }, { status: 500 });
     }
 
     const data = await req.json();
     const customer = data.customer;
-    const payload = {
-      name: customer.name,
-      lastname: customer.lastname,
-      address: customer.address,
-      email: customer.email,
-      phone: customer.phone,
-      cart: (data.cart as { name: string; quantity: number }[]).map((p) => ({
-        name: p.name,
-        quantity: p.quantity,
-      })),
-          };
-    
-    
-    const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
-    
-    
+    const cart = data.cart || [];
+    const orderId = data.orderId || `order_${Date.now()}`;
 
+    // ✅ Prepare simple Clip request (no customer data here)
     const requestBody = {
       amount: data.amount,
       currency: "MXN",
-      purchase_description: encodedPayload, // 🧠 This is what your webhook will decode
+      purchase_description: `Compra en Creyewear - ${orderId}`,
       redirection_url: {
-        success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
-        error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
-        default: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/default`,
+        success: `${NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
+        error: `${NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
+        default: `${NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/default`,
       },
-      webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
+      webhook_url: `${NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
     };
-    
-    console.log("📦 Encoded payload being sent to Clip:", encodedPayload);
-    console.log("🧾 Full request body:", requestBody);
 
+    console.log("📤 Sending to Clip:", requestBody);
 
     const response = await fetch(CLIP_ENDPOINT, {
       method: "POST",
@@ -60,24 +45,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Clip error", details: result }, { status: response.status });
     }
 
-    const cart = data.cart || [];
+    // ✅ Email summary for store owner
+    const productSummary = cart
+      .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
+      .join("\n");
 
-const productSummary = cart
-  .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
-  .join("\n");
+    const summary = `
+👤 Cliente: ${customer.name} ${customer.lastname}
+📬 Dirección: ${customer.address}
+📧 Correo: ${customer.email}
+📱 Teléfono: ${customer.phone}
 
-const summary = `
-  👤 Cliente: ${customer.name} ${customer.lastname}
-  📬 Dirección: ${customer.address}
-  📧 Correo: ${customer.email}
-  📱 Teléfono: ${customer.phone}
+🛍️ Productos:
+${productSummary}
 
-  🛍️ Productos:
-  ${productSummary}
-
-  💳 Monto: $${data.amount}
-`;
-
+💳 Monto: $${data.amount}
+    `;
 
     try {
       await resend.emails.send({
