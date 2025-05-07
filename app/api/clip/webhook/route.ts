@@ -21,23 +21,27 @@ export async function POST(req: NextRequest) {
 
     const decoded = JSON.parse(Buffer.from(encoded, "base64").toString("utf-8"));
     const customer = decoded.customer;
-    const productName = decoded.productName;
-    const quantity = decoded.quantity;
+    const cart = decoded.cart;
+    
+
+    const productSummary = cart
+  .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
+  .join("\n");
 
 
-
-    const summary = `
+  const summary = `
   👤 Cliente: ${customer.name} ${customer.lastname}
   📬 Dirección: ${customer.address}
   📧 Correo: ${customer.email}
   📱 Teléfono: ${customer.phone}
 
-  📦 Producto: ${productName}
-  🔢 Cantidad: ${quantity}
+  🛍️ Productos:
+  ${productSummary}
 
   💳 Estatus del pago: ${status}
   📅 Fecha: ${body?.payment_detail?.payment_date || "N/A"}
 `;
+
 
 
     await resend.emails.send({

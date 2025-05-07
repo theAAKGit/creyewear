@@ -89,17 +89,18 @@ export default function Checkout() {
             {/* Clip Payment */}
             <h2 className="text-xl font-bold mt-6">Pago con Clip</h2>
             <ClipButton
-            total={subtotal}
-            customer={{
-              name: firstName,
-              lastname: lastName,
-              address,
-              email,
-              phone,
-            }}
-            productName={cart.length === 1 ? cart[0].name : "Múltiples productos"}
-            quantity={cart.reduce((sum, product) => sum + product.quantity, 0)}
-          />
+  total={subtotal}
+  customer={{
+    name: firstName,
+    lastname: lastName,
+    address,
+    email,
+    phone,
+  }}
+  cart={cart.map((p) => ({ name: p.name, quantity: p.quantity }))}
+/>
+
+
 
 
           </div>

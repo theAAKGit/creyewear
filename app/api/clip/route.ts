@@ -14,11 +14,11 @@ export async function POST(req: Request) {
     const customer = data.customer;
     const payload = {
       customer,
-      productName: data.productName,
-      quantity: data.quantity,
+      cart: data.cart, // ✅ get full cart info
     };
     
     const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
+    
     
 
     const requestBody = {
@@ -33,6 +33,9 @@ export async function POST(req: Request) {
       webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
     };
     
+    console.log("📦 Encoded payload being sent to Clip:", encodedPayload);
+    console.log("🧾 Full request body:", requestBody);
+
 
     const response = await fetch(CLIP_ENDPOINT, {
       method: "POST",

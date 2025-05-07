@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 
-
 interface CustomerInfo {
   name: string;
   lastname: string;
@@ -10,29 +9,36 @@ interface CustomerInfo {
   phone: string;
 }
 
-export default function ClipButton({
-  total,
-  customer,
-  productName,
-  quantity,
-}: {
+interface CartItem {
+  name: string;
+  quantity: number;
+}
+
+interface ClipButtonProps {
   total: number;
   customer: CustomerInfo;
-  productName: string;
-  quantity: number;
-}) {
+  cart: CartItem[];
+}
+
+export default function ClipButton({ total, customer, cart }: ClipButtonProps) {
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
-
-    if (!customer.name || !customer.lastname || !customer.address || !customer.email || !customer.phone) {
+    if (
+      !customer.name ||
+      !customer.lastname ||
+      !customer.address ||
+      !customer.email ||
+      !customer.phone
+    ) {
       alert("Por favor, completa todos los campos de entrega y contacto.");
       return;
     }
-    
+
     setLoading(true);
     try {
       console.log("👤 Customer info being sent to API:", customer);
+      console.log("🛍️ Cart info being sent to API:", cart);
 
       const response = await fetch("/api/clip", {
         method: "POST",
@@ -40,9 +46,8 @@ export default function ClipButton({
         body: JSON.stringify({
           amount: total,
           description: "Compra en Creyewear",
-          customer, 
-          productName,    
-          quantity,      
+          customer,
+          cart, // ✅ Full cart passed here
           orderId: `order_${Date.now()}`,
         }),
       });
@@ -50,15 +55,10 @@ export default function ClipButton({
       const data = await response.json();
 
       if (data.payment_request_url) {
-        window.location.href = data.payment_request_url; // Redirect to Clip payment link
+        window.location.href = data.payment_request_url;
       } else {
         alert("Error al generar el link de pago");
         console.error("Clip API error response:", data);
-        if (data && data.error) {
-          console.error("Error from Clip API:", data.error);
-        } else {
-          console.error("Unexpected response format from Clip API:", data);
-        }
       }
     } catch (error) {
       console.error("Error initiating payment:", error);
