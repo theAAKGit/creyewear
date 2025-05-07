@@ -1,7 +1,5 @@
 "use client";
-
 import { useState } from "react";
-import { useCart } from "@/context/CartContext"; // adjust path as needed
 
 
 interface CustomerInfo {
@@ -20,7 +18,7 @@ export default function ClipButton({
   customer: CustomerInfo;
 }) {
   const [loading, setLoading] = useState(false);
-  const { cart } = useCart();
+
   const handlePayment = async () => {
 
     if (!customer.name || !customer.lastname || !customer.address || !customer.email || !customer.phone) {
@@ -38,7 +36,6 @@ export default function ClipButton({
           amount: total,
           description: "Compra en Creyewear",
           customer, 
-          cart,
           orderId: `order_${Date.now()}`,
         }),
       });

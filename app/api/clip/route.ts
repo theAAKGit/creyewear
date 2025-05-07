@@ -3,26 +3,6 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-type Customer = {
-  name: string;
-  lastname: string;
-  address: string;
-  email: string;
-  phone: string;
-};
-
-type CartItem = {
-  id: number;
-  name: string;
-  quantity: number;
-};
-
-type RequestPayload = {
-  customer: Customer;
-  cart: CartItem[];
-  amount: number;
-};
-
 export async function POST(req: Request) {
   try {
     const { CLIP_AUTH_TOKEN, CLIP_ENDPOINT } = process.env;
@@ -30,21 +10,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing Clip config" }, { status: 500 });
     }
 
-    const raw = await req.json();
+    const data = await req.json();
+    const customer = data.customer;
+    const encodedCustomer = Buffer.from(JSON.stringify(customer)).toString("base64");
 
-    const { customer, cart, amount } = raw as RequestPayload;
-
-    if (!customer || !cart || !amount) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-    }
-
-    const payload = { customer, cart };
-    const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
 
     const requestBody = {
-      amount,
+      amount: data.amount,
       currency: "MXN",
-      purchase_description: encodedPayload,
+      purchase_description: encodedCustomer, // 🧠 This is what your webhook will decode
       redirection_url: {
         success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
         error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
@@ -52,6 +26,7 @@ export async function POST(req: Request) {
       },
       webhook_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/clip/webhook`,
     };
+    
 
     const response = await fetch(CLIP_ENDPOINT, {
       method: "POST",
@@ -68,19 +43,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Clip error", details: result }, { status: response.status });
     }
 
-    const itemsList = cart.map(({ name, quantity }) => `• ${name} x${quantity}`).join("\n");
-
+    // ✅ Send email immediately
     const summary = `
-👤 Cliente: ${customer.name} ${customer.lastname}
-📧 Correo: ${customer.email}
-📱 Teléfono: ${customer.phone}
-📬 Dirección: ${customer.address}
-
-🧾 Productos:
-${itemsList}
-
-💳 Monto: $${amount}
-`;
+      👤 Cliente: ${customer.name} ${customer.lastname}
+      📬 Dirección: ${customer.address}
+      📧 Correo: ${customer.email}
+      📱 Teléfono: ${customer.phone}
+      💳 Monto: $${data.amount}
+    `;
 
     try {
       await resend.emails.send({

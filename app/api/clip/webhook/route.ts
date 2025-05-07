@@ -9,7 +9,9 @@ export async function POST(req: NextRequest) {
     console.log("🚨 Clip webhook endpoint was triggered");
     console.log("📩 Webhook body:", JSON.stringify(body, null, 2));
 
+  
     const status = body?.payment_detail?.status_description || "N/A";
+
     const encoded = body?.payment_request_detail?.purchase_description;
 
     if (!encoded) {
@@ -17,26 +19,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Missing customer info" }, { status: 200 });
     }
 
-    const decoded = JSON.parse(Buffer.from(encoded, "base64").toString("utf-8"));
-    const customer = decoded.customer;
-    const cart = decoded.cart || [];
+    const customer = JSON.parse(Buffer.from(encoded, "base64").toString("utf-8"));
 
-    const itemsList = cart.map(
-      (item: { name: string; quantity: number }) => `• ${item.name} x${item.quantity}`
-    ).join("\n");
 
     const summary = `
-👤 Cliente: ${customer.name} ${customer.lastname}
-📧 Correo: ${customer.email}
-📱 Teléfono: ${customer.phone}
-📬 Dirección: ${customer.address}
+      👤 Cliente: ${customer.name} ${customer.lastname}
+      📬 Dirección: ${customer.address}
+      📧 Correo: ${customer.email}
+      📱 Teléfono: ${customer.phone}
 
-🧾 Productos:
-${itemsList}
-
-💳 Estatus del pago: ${status}
-📅 Fecha: ${body?.payment_detail?.payment_date || "N/A"}
-`;
+      💳 Estatus del pago: ${status}
+      📅 Fecha: ${body?.payment_detail?.payment_date || "N/A"}
+    `;
 
     await resend.emails.send({
       from: "onboarding@resend.dev",
