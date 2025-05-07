@@ -7,13 +7,13 @@ export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState<null | { src: string; alt: string }>(null);
 
   const images = [
-    { src: "/images/h1.jpg", alt: "Model wearing sunglasses" },
-    { src: "/images/v1.jpg", alt: "Ski goggles fashion" },
-    { src: "/images/v2.jpg", alt: "Classic round sunglasses" },
-    { src: "/images/v3.jpg", alt: "Pink translucent glasses" },
-    { src: "/images/5.png", alt: "Man wearing shades with cap" },
-    { src: "/images/6.png", alt: "Black sunglasses product" },
-    { src: "/images/7.png", alt: "Brown tortoiseshell sunglasses" },
+    { src: "/images/gallery/h1.jpg", alt: "Model wearing sunglasses" },
+    { src: "/images/gallery/v1.jpg", alt: "Ski goggles fashion" },
+    { src: "/images/gallery/v2.jpg", alt: "Classic round sunglasses" },
+    { src: "/images/gallery/v3.jpg", alt: "Pink translucent glasses" },
+    { src: "/images/gallery/5.png", alt: "Man wearing shades with cap" },
+    { src: "/images/gallery/6.png", alt: "Black sunglasses product" },
+    { src: "/images/gallery/7.png", alt: "Brown tortoiseshell sunglasses" },
   ];
 
   const handleOpen = (img: { src: string; alt: string }) => {
