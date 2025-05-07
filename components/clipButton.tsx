@@ -45,23 +45,15 @@ export default function ClipButton({ total, customer, cart }: ClipButtonProps) {
       console.log("👤 Customer info being sent to API:", customer);
       console.log("🛍️ Cart info being sent to API:", cart);
 
-      const encoded = Buffer.from(
-        JSON.stringify({ ...customer, cart })
-      ).toString("base64");
-
       const response = await fetch("/api/clip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: total,
-          currency: "MXN",
-          purchase_description: encoded,
-          redirection_url: {
-            success: "https://creyewear.com.mx/store/checkout/redirection/success",
-            error: "https://creyewear.com.mx/store/checkout/redirection/error",
-            default: "https://creyewear.com.mx/store/checkout/redirection/default",
-          },
-          webhook_url: "https://creyewear.com.mx/api/clip/webhook",
+          description: "Compra en Creyewear",
+          customer,
+          cart, // ✅ Full cart passed here
+          orderId: `order_${Date.now()}`,
         }),
       });
 
