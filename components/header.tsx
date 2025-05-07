@@ -9,14 +9,14 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 export default function Header() {
   //const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
   const { cart, toggleCart } = useCart();
 /*
   useEffect(() => {
     setIsClient(true); // Ensures the component re-renders only on the client
   }, []);
 */
-  const categories = ["Hombre", "Mujer"];
+  
 
   return (
     <>
@@ -39,7 +39,7 @@ export default function Header() {
             {/* Logo (Image) */}
             <Link href="/" className="flex items-center no-underline">
               <img
-                src="/images/creyewearlogo.png"
+                src="/images/icons/creyewearlogo.png"
                 alt="Creyewear Logo"
                 width={150}
                 height={50}
@@ -48,29 +48,8 @@ export default function Header() {
 
             {/* Navigation */}
             <nav className="hidden md:flex items-center space-x-4"> {/* Adjusted spacing */}
-              <div
-                className="relative group"
-                onMouseEnter={() => setIsDropdownOpen(true)}
-                onMouseLeave={() => setIsDropdownOpen(false)}
-              >
-                <Link href="/store" className="text-black hover:text-[#84AAAF] transition no-underline">Tienda</Link>
-                {isDropdownOpen && (
-                  <div className="absolute left-0 top-full bg-[#19333F] rounded shadow-md w-40 z-50">
-                    <ul className="py-2">
-                      {categories.map((category) => (
-                        <li key={category}>
-                          <Link
-                            href={`/store?category=${category.toLowerCase()}`}
-                            className="block px-4 py-2 text-[white] hover:text-[#84AAAF] transition no-underline"
-                          >
-                            {category}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
+              
+              <Link href="/store" className="text-black hover:text-[#84AAAF] transition no-underline">Tienda</Link>
               <Link href="/gallery" className="text-black hover:text-[#84AAAF] transition no-underline">Galería</Link>
               <Link href="/blog" className="text-black hover:text-[#84AAAF] transition no-underline">Blog</Link>
             </nav>

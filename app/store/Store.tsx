@@ -78,7 +78,7 @@ useEffect(() => {
   return (
     <div className="container mx-auto py-8 overflow-hidden">
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar */}
+        {/* Sidebar 
         <aside className="w-full lg:w-1/4">
           <h2 className="text-xl font-bold mb-4 text-black">Categorías</h2>
           <ul className="space-y-2">
@@ -98,7 +98,7 @@ useEffect(() => {
             ))}
           </ul>
         </aside>
-
+        */}
         {/* Product List */}
         <div className="flex-1">
           <input
