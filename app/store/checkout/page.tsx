@@ -9,7 +9,6 @@ import ClipButton from "@/components/clipButton";
 export default function Checkout() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const { cart } = useCart(); // 🛒 Get cart items from context
