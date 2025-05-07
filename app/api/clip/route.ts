@@ -3,7 +3,6 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ✅ Type Definitions
 type Customer = {
   name: string;
   lastname: string;
@@ -31,7 +30,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing Clip config" }, { status: 500 });
     }
 
-    const { customer, cart, amount }: RequestPayload = await req.json();
+    const raw = await req.json();
+
+    const { customer, cart, amount } = raw as RequestPayload;
+
+    if (!customer || !cart || !amount) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
 
     const payload = { customer, cart };
     const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
@@ -63,10 +68,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Clip error", details: result }, { status: response.status });
     }
 
-    // 🧾 Format items list
-    const itemsList = cart
-      .map(({ name, quantity }) => `• ${name} x${quantity}`)
-      .join("\n");
+    const itemsList = cart.map(({ name, quantity }) => `• ${name} x${quantity}`).join("\n");
 
     const summary = `
 👤 Cliente: ${customer.name} ${customer.lastname}
