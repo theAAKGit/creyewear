@@ -35,6 +35,11 @@ export default function ClipButton({ total, customer, cart }: ClipButtonProps) {
       return;
     }
 
+    if (total <= 0) {
+      alert("El total debe ser mayor a $0.");
+      return;
+    }
+
     setLoading(true);
     try {
       console.log("👤 Customer info being sent to API:", customer);

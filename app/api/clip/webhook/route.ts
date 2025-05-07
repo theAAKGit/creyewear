@@ -11,9 +11,7 @@ export async function POST(req: NextRequest) {
 
     const status = body?.payment_detail?.status_description || "N/A";
 
-    const encoded = body?.payment_request?.purchase_description || body?.payment_request_detail?.purchase_description;
-    console.log("📦 Encoded payload found in webhook:", encoded);
-
+    const encoded = body?.payment_request_detail?.purchase_description;
 
     if (!encoded) {
       console.warn("⚠️ No encoded customer info found in purchase_description");

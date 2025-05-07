@@ -52,14 +52,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Clip error", details: result }, { status: response.status });
     }
 
-    // ✅ Send email immediately
-    const summary = `
-      👤 Cliente: ${customer.name} ${customer.lastname}
-      📬 Dirección: ${customer.address}
-      📧 Correo: ${customer.email}
-      📱 Teléfono: ${customer.phone}
-      💳 Monto: $${data.amount}
-    `;
+    const cart = data.cart || [];
+
+const productSummary = cart
+  .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
+  .join("\n");
+
+const summary = `
+  👤 Cliente: ${customer.name} ${customer.lastname}
+  📬 Dirección: ${customer.address}
+  📧 Correo: ${customer.email}
+  📱 Teléfono: ${customer.phone}
+
+  🛍️ Productos:
+  ${productSummary}
+
+  💳 Monto: $${data.amount}
+`;
+
 
     try {
       await resend.emails.send({
