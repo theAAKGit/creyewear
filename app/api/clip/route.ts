@@ -12,13 +12,19 @@ export async function POST(req: Request) {
 
     const data = await req.json();
     const customer = data.customer;
-    const encodedCustomer = Buffer.from(JSON.stringify(customer)).toString("base64");
-
+    const payload = {
+      customer,
+      productName: data.productName,
+      quantity: data.quantity,
+    };
+    
+    const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
+    
 
     const requestBody = {
       amount: data.amount,
       currency: "MXN",
-      purchase_description: encodedCustomer, // 🧠 This is what your webhook will decode
+      purchase_description: encodedPayload, // 🧠 This is what your webhook will decode
       redirection_url: {
         success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
         error: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,

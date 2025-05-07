@@ -13,9 +13,13 @@ interface CustomerInfo {
 export default function ClipButton({
   total,
   customer,
+  productName,
+  quantity,
 }: {
   total: number;
   customer: CustomerInfo;
+  productName: string;
+  quantity: number;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +33,7 @@ export default function ClipButton({
     setLoading(true);
     try {
       console.log("👤 Customer info being sent to API:", customer);
+
       const response = await fetch("/api/clip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,6 +41,8 @@ export default function ClipButton({
           amount: total,
           description: "Compra en Creyewear",
           customer, 
+          productName,    
+          quantity,      
           orderId: `order_${Date.now()}`,
         }),
       });

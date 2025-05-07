@@ -19,18 +19,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Missing customer info" }, { status: 200 });
     }
 
-    const customer = JSON.parse(Buffer.from(encoded, "base64").toString("utf-8"));
+    const decoded = JSON.parse(Buffer.from(encoded, "base64").toString("utf-8"));
+    const customer = decoded.customer;
+    const productName = decoded.productName;
+    const quantity = decoded.quantity;
+
 
 
     const summary = `
-      👤 Cliente: ${customer.name} ${customer.lastname}
-      📬 Dirección: ${customer.address}
-      📧 Correo: ${customer.email}
-      📱 Teléfono: ${customer.phone}
+  👤 Cliente: ${customer.name} ${customer.lastname}
+  📬 Dirección: ${customer.address}
+  📧 Correo: ${customer.email}
+  📱 Teléfono: ${customer.phone}
 
-      💳 Estatus del pago: ${status}
-      📅 Fecha: ${body?.payment_detail?.payment_date || "N/A"}
-    `;
+  📦 Producto: ${productName}
+  🔢 Cantidad: ${quantity}
+
+  💳 Estatus del pago: ${status}
+  📅 Fecha: ${body?.payment_detail?.payment_date || "N/A"}
+`;
+
 
     await resend.emails.send({
       from: "onboarding@resend.dev",
