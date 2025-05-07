@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -12,7 +13,7 @@ const slides = [
   { id: 2, text: "", image: "/images/homepage/2.png" },
   { id: 3, text: "", image: "/images/homepage/3.png" },
   { id: 4, text: "", image: "/images/homepage/4.png" },
-  
+ 
 ];
 
 export default function Home() {
@@ -36,30 +37,34 @@ export default function Home() {
   return (
     <div className="text-center">
       {/* Swiper Section */}
-      <div className="relative mx-auto w-full sm:w-[90%] md:w-[80%] lg:w-[70%]">
+      <div className="relative mx-auto w-full max-w-[1400px] px-4">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           navigation
           pagination={{ clickable: true }}
           autoplay={{ delay: 3000 }}
           loop={true}
-          className="swiper-container"
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
-              <div className="relative">
-                <img
-                  src={slide.image}
-                  alt={slide.text}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center">
-  <h2 className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold drop-shadow-lg">
-    {slide.text}
-  </h2>
-</div>
-
+              <div className="relative w-full flex justify-center items-center overflow-hidden">
+                <div className="scale-100 sm:scale-[0.80] md:scale-85 lg:scale-[.9] transition-transform">
+                  <Image
+                    src={slide.image}
+                    alt={slide.text || `Slide ${slide.id}`}
+                    width={1200}
+                    height={600}
+                    className="object-contain w-full h-auto"
+                    priority={slide.id === 1}
+                  />
+                </div>
+                {slide.text && (
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+                    <h2 className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold drop-shadow-lg">
+                      {slide.text}
+                    </h2>
+                  </div>
+                )}
               </div>
             </SwiperSlide>
           ))}
@@ -70,7 +75,6 @@ export default function Home() {
       {isPopupVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 text-white p-10 sm:p-12 rounded-lg shadow-lg w-11/12 sm:w-[500px] md:w-[650px]">
-            {/* Close Button */}
             <button
               className="absolute top-4 right-4 text-white hover:text-gray-400 text-2xl"
               onClick={closePopup}
@@ -78,7 +82,6 @@ export default function Home() {
               &times;
             </button>
 
-            {/* Form Title */}
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-center">
               Suscríbete
             </h2>
@@ -86,7 +89,6 @@ export default function Home() {
               * Indica requerido
             </p>
 
-            {/* Mailchimp Form */}
             <form
               action="https://gmail.us3.list-manage.com/subscribe/post?u=32b94a5dac9927710c0fdd16e&amp;id=6d8cd7eb00&amp;f_id=000f35e2f0"
               method="post"
@@ -125,7 +127,6 @@ export default function Home() {
                   />
                 </div>
               </div>
-
 
               <div className="mt-8">
                 <button
