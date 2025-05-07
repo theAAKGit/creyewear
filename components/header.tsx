@@ -26,7 +26,7 @@ export default function Header() {
         background: "url('/images/lilac-banner.png') no-repeat center/cover",
       }}
     >
-      2x1 en todos los lentes de mujer
+      Nada es lo que parece
     </div>
 
 

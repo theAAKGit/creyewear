@@ -16,7 +16,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Creyewear",
-  description: "Be unique, be creyewear",
+  description: "Nada es lo que parece",
 };
 
 export default function RootLayout({
