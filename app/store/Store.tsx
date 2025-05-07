@@ -30,7 +30,7 @@ export default function Store() {
   const [selectedCategory, setSelectedCategory] = useState("todas");
   const searchParams = useSearchParams();
   const router = useRouter();
-  const categories = ["todas", "hombre", "mujer"];
+  //const categories = ["todas", "hombre", "mujer"];
 
   // Fetch products dynamically from Redis API
 useEffect(() => {
