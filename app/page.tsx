@@ -8,10 +8,10 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const slides = [
-  { id: 1, text: "", image: "/images/homepage/VIC2.jpg" },
-  { id: 2, text: "", image: "/images/homepage/VIC6.jpg" },
-  { id: 3, text: "", image: "/images/homepage/VIC7.jpg" },
-  { id: 4, text: "", image: "/images/homepage/VIC9.jpg" },
+  { id: 1, text: "", image: "/images/homepage/1.png" },
+  { id: 2, text: "", image: "/images/homepage/2.png" },
+  { id: 3, text: "", image: "/images/homepage/3.png" },
+  { id: 4, text: "", image: "/images/homepage/4.png" },
   
 ];
 
