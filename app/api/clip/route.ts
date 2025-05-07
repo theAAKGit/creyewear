@@ -13,9 +13,14 @@ export async function POST(req: Request) {
     const data = await req.json();
     const customer = data.customer;
     const payload = {
-      customer,
-      cart: data.cart, // ✅ get full cart info
+      name: customer.name,
+      lastname: customer.lastname,
+      address: customer.address,
+      email: customer.email,
+      phone: customer.phone,
+      cart: data.cart.map((p: any) => ({ name: p.name, quantity: p.quantity })),
     };
+    
     
     const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
     
