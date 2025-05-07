@@ -49,15 +49,7 @@ const [postalCode, setPostalCode] = useState("");
               {deliveryMethod === "home" && <span className="text-green-400">✔</span>}
             </button>
 
-            <button
-              onClick={() => setDeliveryMethod("pickup")}
-              className={`w-full flex items-center justify-between px-6 py-4 rounded-md border ${
-                deliveryMethod === "pickup" ? "border-[#84AAAF] bg-[#4B6B70]" : "border-gray-500"
-              }`}
-            >
-              <span className="flex items-center gap-2">📍 Recoger en puntos de recolección</span>
-              {deliveryMethod === "pickup" && <span className="text-green-400">✔</span>}
-            </button>
+            
           </div>
 
           {/* 📜 Name & Address */}
@@ -193,7 +185,7 @@ const [postalCode, setPostalCode] = useState("");
             <span className="text-green-400">Gratis</span>
           </div>
           <div className="w-full bg-green-400 h-1 my-2"></div>
-          <p className="text-green-400 mb-4">¡Calificas para envío gratuito!</p>
+         
 
           <div className="flex justify-between text-white font-bold text-lg">
             <span>Total</span>

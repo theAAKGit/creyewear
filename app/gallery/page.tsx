@@ -4,21 +4,29 @@ import { useState } from "react";
 import Image from "next/image";
 
 export default function Gallery() {
-  const [selectedImage, setSelectedImage] = useState<null | { src: string; alt: string }>(null);
+  const [selectedImage, setSelectedImage] = useState<null | {
+    src: string;
+    alt: string;
+    material: string;
+    polarizado: boolean;
+  }>(null);
+  
 
   const images = [
-    { src: "/images/gallery/h1.jpg", alt: "Model wearing sunglasses" },
-    { src: "/images/gallery/v1.jpg", alt: "Ski goggles fashion" },
-    { src: "/images/gallery/v2.jpg", alt: "Classic round sunglasses" },
-    { src: "/images/gallery/v3.jpg", alt: "Pink translucent glasses" },
-    { src: "/images/gallery/5.png", alt: "Man wearing shades with cap" },
-    { src: "/images/gallery/6.png", alt: "Black sunglasses product" },
-    { src: "/images/gallery/7.png", alt: "Brown tortoiseshell sunglasses" },
+    { src: "/images/gallery/1.png", alt: "1814", material: "Acetato", polarizado: true },
+    { src: "/images/gallery/v1.jpg", alt: "Cactus", material: "Acetato", polarizado: true },
+    { src: "/images/gallery/v2.jpg", alt: "Bye", material: "Acero Inoxidable", polarizado: true },
+    { src: "/images/gallery/v3.jpg", alt: "Bye", material: "Acero Inoxidable", polarizado: true },
+    { src: "/images/gallery/5.png", alt: "Man wearing shades with cap", material: "Madera", polarizado: true },
+    { src: "/images/gallery/6.png", alt: "Black sunglasses product", material: "Acetato", polarizado: true },
+    { src: "/images/gallery/7.png", alt: "Brown tortoiseshell sunglasses", material: "Metal", polarizado: true },
   ];
+  
 
-  const handleOpen = (img: { src: string; alt: string }) => {
+  const handleOpen = (img: typeof images[0]) => {
     setSelectedImage(img);
   };
+  
 
   const handleClose = () => {
     setSelectedImage(null);
@@ -77,11 +85,11 @@ export default function Gallery() {
         <div>
           <h2 className="text-2xl font-bold text-black mb-4">Detalles</h2>
           <ul className="text-black text-lg space-y-2">
-            <li><strong>Modelo:</strong> {selectedImage.alt.split(":")[0] || "Modelo Genérico"}</li>
-            <li><strong>Colección:</strong> Primavera-Verano 2025</li>
-            <li><strong>Material:</strong> Acetato Premium</li>
-            <li><strong>Descripción:</strong> {selectedImage.alt}</li>
+            <li><strong>Modelo:</strong> {selectedImage.alt || "Modelo Genérico"}</li>
+            <li><strong>Material:</strong> {selectedImage.material}</li>
+            <li><strong>Polarizado:</strong> {selectedImage.polarizado ? "Sí" : "No"}</li>
           </ul>
+
         </div>
       </div>
 
