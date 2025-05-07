@@ -8,9 +8,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const slides = [
-  { id: 1, text: "", image: "/images/3.png" },
-  { id: 2, text: "", image: "/images/4.png" },
-  { id: 3, text: "", image: "/images/5.png" },
+  { id: 1, text: "", image: "/images/homepage/VIC2.jpg" },
+  { id: 2, text: "", image: "/images/homepage/VIC6.jpg" },
+  { id: 3, text: "", image: "/images/homepage/VIC7.jpg" },
+  { id: 4, text: "", image: "/images/homepage/VIC9.jpg" },
+  
 ];
 
 export default function Home() {
