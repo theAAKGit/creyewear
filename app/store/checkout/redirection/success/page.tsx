@@ -1,8 +1,26 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function SuccessPage() {
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get("orderId");
+
+  useEffect(() => {
+    if (orderId) {
+      fetch(`/api/send-mail?orderId=${orderId}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Email failed");
+          console.log("✅ Email sent from success page");
+        })
+        .catch((err) => {
+          console.error("❌ Email send failed:", err);
+        });
+    }
+  }, [orderId]);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-100">
       <div className="text-center p-8 bg-white rounded shadow-md">

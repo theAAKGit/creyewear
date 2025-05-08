@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 
 interface CustomerInfo {
   name: string;
@@ -22,6 +24,7 @@ interface ClipButtonProps {
 
 export default function ClipButton({ total, customer, cart }: ClipButtonProps) {
   const [loading, setLoading] = useState(false);
+  const orderId = `order_${uuidv4()}`;
 
   const handlePayment = async () => {
     if (
@@ -45,6 +48,18 @@ export default function ClipButton({ total, customer, cart }: ClipButtonProps) {
       console.log("👤 Customer info being sent to API:", customer);
       console.log("🛍️ Cart info being sent to API:", cart);
 
+            // Store the order in Redis
+      await fetch("/api/cache-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId,
+          customer,
+          cart,
+          amount: total,
+        }),
+      });
+
       const response = await fetch("/api/clip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,7 +68,7 @@ export default function ClipButton({ total, customer, cart }: ClipButtonProps) {
           description: "Compra en Creyewear",
           customer,
           cart, // ✅ Full cart passed here
-          orderId: `order_${Date.now()}`,
+          orderId,
         }),
       });
 
