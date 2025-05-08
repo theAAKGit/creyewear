@@ -2,12 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
 import { Resend } from "resend";
 
+interface InventoryProduct {
+  name: string;
+  inventory?: number;
+  hidden?: boolean;
+  [key: string]: any; // optional fallback if your structure varies
+}
+
+
 const redis = Redis.fromEnv();
 const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const orderId = searchParams.get("orderId");
+  
 
   if (!orderId) {
     return NextResponse.json({ error: "Missing orderId" }, { status: 400 });
@@ -23,12 +33,12 @@ export async function GET(req: NextRequest) {
     const { customer, cart, amount } = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
     // Fetch and update inventory
     const productsRaw = await redis.get("products");
-    let products = typeof productsRaw === "string" ? JSON.parse(productsRaw) : productsRaw;
-
+    const products = typeof productsRaw === "string" ? JSON.parse(productsRaw) : productsRaw;
+    
     let updated = false;
 
     for (const item of cart) {
-      const product = products.find((p: any) => p.name === item.name);
+      const product = (products as InventoryProduct[]).find((p) => p.name === item.name);
 
       if (product && typeof product.inventory === "number") {
         product.inventory = Math.max(0, product.inventory - item.quantity);
