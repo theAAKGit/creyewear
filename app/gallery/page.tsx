@@ -13,13 +13,13 @@ export default function Gallery() {
   
 
   const images = [
-    { src: "/images/gallery/1.png", alt: "1814", material: "Acetato", polarizado: true },
+    { src: "/images/gallery/test.png", alt: "1814", material: "Acetato", polarizado: true },
     { src: "/images/gallery/v1.jpg", alt: "Cactus", material: "Acetato", polarizado: true },
     { src: "/images/gallery/v2.jpg", alt: "Bye", material: "Acero Inoxidable", polarizado: true },
     { src: "/images/gallery/v3.jpg", alt: "Bye", material: "Acero Inoxidable", polarizado: true },
-    { src: "/images/gallery/5.png", alt: "Man wearing shades with cap", material: "Madera", polarizado: true },
-    { src: "/images/gallery/6.png", alt: "Black sunglasses product", material: "Acetato", polarizado: true },
-    { src: "/images/gallery/7.png", alt: "Brown tortoiseshell sunglasses", material: "Metal", polarizado: true },
+    { src: "/images/gallery/2.jpg", alt: "Man wearing shades with cap", material: "Madera", polarizado: true },
+    { src: "/images/gallery/3.jpg", alt: "Black sunglasses product", material: "Acetato", polarizado: true },
+    { src: "/images/gallery/4.jpg", alt: "Brown tortoiseshell sunglasses", material: "Metal", polarizado: true },
   ];
   
 
@@ -49,22 +49,34 @@ export default function Gallery() {
           `,
         }}
       >
-        {images.map((img, index) => (
-          <div
-            key={index}
-            style={{ gridArea: `img${index + 1}` }}
-            onClick={() => handleOpen(img)}
-            className="cursor-pointer"
-          >
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={800}
-              height={1000}
-              className="w-full h-full object-cover shadow"
-            />
-          </div>
-        ))}
+        {/* Decorative stacked squares for img1 */}
+<div
+  style={{ gridArea: "img1" }}
+  className="flex flex-col w-full h-full"
+>
+  <div className="bg-[#e4e4e4] flex-1 w-full" />
+  <div className="bg-[#d5c6e0] flex-1 w-full" />
+  <div className="bg-[#d5c6e0] flex-1 w-full" />
+</div>
+
+{/* Rest of the images */}
+{images.slice(1).map((img, index) => (
+  <div
+    key={index + 1}
+    style={{ gridArea: `img${index + 2}` }}
+    onClick={() => handleOpen(img)}
+    className="cursor-pointer"
+  >
+    <Image
+      src={img.src}
+      alt={img.alt}
+      width={800}
+      height={1000}
+      className="w-full h-full object-cover shadow"
+    />
+  </div>
+))}
+
       </div>
 
       {/* Modal */}
@@ -87,7 +99,7 @@ export default function Gallery() {
           <ul className="text-black text-lg space-y-2">
             <li><strong>Modelo:</strong> {selectedImage.alt || "Modelo Genérico"}</li>
             <li><strong>Material:</strong> {selectedImage.material}</li>
-            <li><strong>Polarizado:</strong> {selectedImage.polarizado ? "Sí" : "No"}</li>
+            
           </ul>
 
         </div>
