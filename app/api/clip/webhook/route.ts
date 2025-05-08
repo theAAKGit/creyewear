@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
     await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: "jrf2421@gmail.com",
+      to: "creyewearmx@gmail.com",
       subject: `🧾 Nueva transacción ${status} en Creyewear`,
       text: summary,
     });

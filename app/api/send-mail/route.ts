@@ -40,7 +40,7 @@ ${productSummary}
 
     await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: "jrf2421@gmail.com", // 📩 your friend's email
+      to: "creyewearmx@gmail.com", 
       subject: `🧾 Nueva orden en Creyewear`,
       text: summary,
     });
