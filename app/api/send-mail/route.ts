@@ -9,6 +9,10 @@ interface InventoryProduct {
   [key: string]: any; // optional fallback if your structure varies
 }
 
+interface CartItem {
+  name: string;
+  quantity: number;
+}
 
 const redis = Redis.fromEnv();
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -30,8 +34,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Order not found in Redis" }, { status: 404 });
     }
 
-    const { customer, cart, amount } = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
-    // Fetch and update inventory
+    const { customer, cart, amount }: { customer: any; cart: CartItem[]; amount: number } =
+    typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+      
     const productsRaw = await redis.get("products");
     const products = typeof productsRaw === "string" ? JSON.parse(productsRaw) : productsRaw;
     
