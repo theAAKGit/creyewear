@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { CartProvider } from "../context/CartContext";
 import CartDrawer from "@/components/cartDrawer";
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,7 +26,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    
+  <html lang="en">
+    
+  {/* Google Analytics */}
+  <Script
+    src="https://www.googletagmanager.com/gtag/js?id=G-CETR3K6EF5"
+    strategy="afterInteractive"
+  />
+  <Script id="gtag-init" strategy="afterInteractive">
+    {`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CETR3K6EF5');
+    `}
+  </Script>
       <body
       className={`${poppins.variable} antialiased text-foreground bg-background flex flex-col min-h-screen font-poppins`}
       >
