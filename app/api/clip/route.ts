@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+// import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
@@ -61,7 +61,7 @@ ${productSummary}
 
 💳 Monto: $${data.amount}
     `;
-
+{/*
     try {
       await resend.emails.send({
         from: "onboarding@resend.dev",
@@ -73,7 +73,7 @@ ${productSummary}
     } catch (e) {
       console.error("❌ Resend failed:", e);
     }
-
+*/}
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("❌ Clip route error:", error);

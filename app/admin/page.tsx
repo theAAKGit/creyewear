@@ -191,6 +191,7 @@ const AdminPage = () => {
       originalPrice: 0,
       discount: "0",
       price: 0,
+      inventory: 0,
     };    
   
     try {
@@ -294,7 +295,8 @@ const handleSaveChanges = async () => {
           discount: product.discount,
           price: product.price,
           sizes: product.sizes ?? [], // ✅ Ensure sizes are always an array
-          images: product.images && product.images.length > 0 ? product.images : [], // ✅ Use uploaded URLs or placeholder
+          images: product.images && product.images.length > 0 ? product.images : [], 
+          inventory: product.inventory ?? 0,
         })),
       }),
     });
@@ -426,6 +428,7 @@ const handleSaveChanges = async () => {
             {productData.map((product) => (
               <div key={product.id} className="p-4 bg-gray-800 text-white rounded-md">
               {/* ✅ Editable Name */}
+              <label className="text-white font-medium block mb-1">Nombre:</label>
               <input
                 type="text"
                 value={product.name}
@@ -434,6 +437,7 @@ const handleSaveChanges = async () => {
               />
             
               {/* Editable Description */}
+              <label className="text-white font-medium block mb-1">Primera descripcion</label>
               <textarea
                 value={product.description}
                 onChange={(e) => handleProductChange(product.id, "description", e.target.value)}
@@ -442,6 +446,7 @@ const handleSaveChanges = async () => {
               />
 
               {/* Editable Secondary Description */}
+              <label className="text-white font-medium block mb-1">Segunda descripcion:</label>
               <textarea
                 value={product.secondaryDescription || ""}
                 onChange={(e) =>
@@ -453,12 +458,14 @@ const handleSaveChanges = async () => {
               ></textarea>
             
               {/* Editable Price */}
+              <label className="text-white font-medium block mb-1">Precio:</label>
               <input
                 type="text"
                 value={(product.originalPrice ?? 0).toFixed(2)}
                 onChange={(e) => handlePriceChange(product.id, "originalPrice", e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-600 rounded-md text-black"
               />
+              <label className="text-white font-medium block mb-1">Descuento:</label>
               <input
                 type="text"
                 value={product.discount ?? "0"}
@@ -466,6 +473,23 @@ const handleSaveChanges = async () => {
                 className="w-full p-2 mt-2 border border-gray-600 rounded-md text-black"
               />
 
+              {/* Editable Inventory */}
+              <label className="text-white font-medium block mb-1">Inventario:</label>
+              <input
+                type="number"
+                min="0"
+                value={product.inventory ?? 0}
+                onChange={(e) =>
+                  setProductData((prevData) =>
+                    prevData.map((p) =>
+                      p.id === product.id ? { ...p, inventory: parseInt(e.target.value) || 0 } : p
+                    )
+                  )
+                }
+                placeholder="Inventario"
+                className="w-full p-2 mt-2 border border-gray-600 rounded-md text-black"
+              />
+              <label className="text-white font-medium block mb-1">Imagenes:</label>
               <MultipleImagesUpload
                 onUpload={(urls) => {
                   console.log(`✅ Received uploaded image URLs for product ${product.id}:`, urls);

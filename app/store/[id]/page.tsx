@@ -19,12 +19,14 @@ interface Product {
   name: string;
   description: string;
   secondaryDescription?: string;
-  images: string[]; 
+  images: string[];
   originalPrice: number;
   discount: string;
   price: number;
   sizes?: string[];
+  inventory?: number; // ✅ Add this
 }
+
 
 interface CartItem extends Product {
   quantity: number;
@@ -195,7 +197,9 @@ export default function ProductPage() {
           )}
 
           {/* Quantity Selector */}
-          <div className="mt-4 flex items-center gap-4">
+          <div className="mt-4 flex items-center justify-between gap-6">
+          {/* Quantity Selector */}
+          <div className="flex items-center gap-2">
             <label className="text-black text-lg font-medium">Cantidad:</label>
             <input
               type="number"
@@ -205,6 +209,15 @@ export default function ProductPage() {
               className="text-black w-16 text-center p-2 border rounded-lg"
             />
           </div>
+
+          {/* Inventory Display */}
+          {product.inventory !== undefined && (
+            <p className="text-sm text-gray-500">
+              Disponibles: <span className="font-semibold text-black">{product.inventory}</span>
+            </p>
+          )}
+        </div>
+
 
           <button
             onClick={handleAddToCart}

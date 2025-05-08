@@ -11,13 +11,15 @@ interface Product {
   name: string;
   description: string;
   secondaryDescription?: string;
-  images: string[]; // ✅ Only using images array
+  images: string[];
   category: string;
   originalPrice: number;
   discount: string;
   price: number;
   sizes?: string[];
+  inventory?: number; // ✅ NEW
 }
+
 
 // GET: Fetch All Products with Correct Discount Applied
 export async function GET() {
@@ -47,6 +49,8 @@ export async function GET() {
           price: Math.max(originalPrice - discountAmount, 0) || 0,
           sizes: Array.isArray(product.sizes) ? product.sizes : [],
           secondaryDescription: product.secondaryDescription || "", // ✅ Add secondary description
+          inventory: typeof product.inventory === "number" ? product.inventory : 0,
+
         };
       }),
     }, { status: 200 });
@@ -112,6 +116,8 @@ export async function POST(req: NextRequest) {
       const newProduct: Product = {
         ...product,
         images, // ✅ Properly include images in product
+        inventory: typeof product.inventory === "number" ? product.inventory : 0, // ✅ fallback
+
       };
 
       // ✅ Add new product to list
@@ -173,6 +179,8 @@ export async function PUT(req: NextRequest) {
           : existingProduct?.images || [], // Keep existing or placeholder
         price: calculatedPrice,
         sizes: Array.isArray(newProduct.sizes) ? newProduct.sizes : existingProduct?.sizes || [], // Merge sizes correctly
+        inventory: typeof newProduct.inventory === "number" ? newProduct.inventory : existingProduct?.inventory || 0, // ✅ added
+
       };
     });
 

@@ -14,6 +14,7 @@ interface Product {
   image?: string;
   originalPrice: number;
   discount: string;
+  inventory?: number;
 }
 
 // ✅ GET: Fetch a Single Product by ID
@@ -48,10 +49,11 @@ export async function GET(req: NextRequest) {
     const product = products.find((p) => p.id === requestedId);
 
     if (product) {
-      // ✅ Convert Markdown to HTML for the description
       product.description = product.description ? md.render(product.description) : "";
       product.secondaryDescription = product.secondaryDescription ? md.render(product.secondaryDescription) : "";
+      product.inventory = typeof product.inventory === "number" ? product.inventory : 0; // ✅ default fallback
     }
+    
 
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });

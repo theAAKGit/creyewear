@@ -12,6 +12,7 @@ export interface Product {
   discount: string;
   price: number;
   sizes?: string[];
+  inventory?: number;
 }
 
 
@@ -60,8 +61,9 @@ export function useProducts() {
                     : parseFloat(discount) || 0),
                 0
               ),
-              sizes: product.sizes ?? [], // ✅ Ensure sizes are always an array
+              sizes: product.sizes ?? [], 
               secondaryDescription: product.secondaryDescription || "",
+              inventory: product.inventory ?? 0,
             };
           });
 
