@@ -194,7 +194,7 @@ const [postalCode, setPostalCode] = useState("");
 
           {/* 📅 Estimated Delivery */}
           <div className="mt-4 bg-gray-900 p-4 rounded-md">
-            <p className="text-gray-300">Llega el <strong className="text-white">mié 12 de feb</strong></p>
+            <p className="text-gray-300">Entrega aproximada <strong className="text-white">10 dias</strong></p>
           </div>
         </div>
 
