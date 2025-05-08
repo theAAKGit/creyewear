@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       currency: "MXN",
       purchase_description: `Compra en Creyewear - ${orderId}`,
       redirection_url: {
-        success: `${NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success`,
+        success: `${process.env.NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/success?orderId=${orderId}`,
         error: `${NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/error`,
         default: `${NEXT_PUBLIC_BASE_URL}/store/checkout/redirection/default`,
       },
