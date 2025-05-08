@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const productSummary = cart
       .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
       .join("\n");
-
+{/* 
     const summary = `
 👤 Cliente: ${customer.name} ${customer.lastname}
 📬 Dirección: ${customer.address}
@@ -61,6 +61,7 @@ ${productSummary}
 
 💳 Monto: $${data.amount}
     `;
+    */}
 {/*
     try {
       await resend.emails.send({
