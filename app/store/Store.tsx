@@ -14,7 +14,8 @@ interface Product {
   originalPrice: number;
   discount: string;
   price: number;
-  sizes?: string[]; // ✅ Add optional sizes field
+  sizes?: string[]; 
+  inventory?: number;
 }
 
 interface CartItem extends Product {
@@ -67,9 +68,11 @@ useEffect(() => {
   // ✅ Filtered products based on category and search term
   const filteredProducts = products.filter(
     (product) =>
+      (product.inventory === undefined || product.inventory > 0) && // ✅ Show only available products
       (selectedCategory === "todas" || product.category === selectedCategory) &&
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
   if (loading) {
     return <p className="text-center text-gray-500">Cargando productos...</p>;
