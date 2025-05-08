@@ -21,6 +21,32 @@ export async function GET(req: NextRequest) {
     }
 
     const { customer, cart, amount } = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+    // Fetch and update inventory
+    const productsRaw = await redis.get("products");
+    let products = typeof productsRaw === "string" ? JSON.parse(productsRaw) : productsRaw;
+
+    let updated = false;
+
+    for (const item of cart) {
+      const product = products.find((p: any) => p.name === item.name);
+
+      if (product && typeof product.inventory === "number") {
+        product.inventory = Math.max(0, product.inventory - item.quantity);
+        if (product.inventory === 0) {
+          product.hidden = true; // Optional: Hide product when inventory hits 0
+        }
+        updated = true;
+      } else {
+        console.warn(`⚠️ Product not found or missing inventory: ${item.name}`);
+      }
+    }
+
+    // Save updated products back to Redis
+    if (updated) {
+      await redis.set("products", JSON.stringify(products));
+      console.log("✅ Inventory updated after purchase");
+    }
+
 
     const productSummary = cart
       .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
