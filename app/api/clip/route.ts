@@ -11,8 +11,8 @@ export async function POST(req: Request) {
     }
 
     const data = await req.json();
-    const customer = data.customer;
-    const cart = data.cart || [];
+    // const customer = data.customer;
+    // const cart = data.cart || [];
     const orderId = data.orderId || `order_${Date.now()}`;
 
     // ✅ Prepare simple Clip request (no customer data here)
@@ -44,12 +44,12 @@ export async function POST(req: Request) {
     if (!response.ok) {
       return NextResponse.json({ error: "Clip error", details: result }, { status: response.status });
     }
-
+{/* 
     // ✅ Email summary for store owner
     const productSummary = cart
       .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
       .join("\n");
-{/* 
+
     const summary = `
 👤 Cliente: ${customer.name} ${customer.lastname}
 📬 Dirección: ${customer.address}
@@ -61,8 +61,7 @@ ${productSummary}
 
 💳 Monto: $${data.amount}
     `;
-    */}
-{/*
+    
     try {
       await resend.emails.send({
         from: "onboarding@resend.dev",
