@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
 import { Resend } from "resend";
 
-interface InventoryProduct {
+// Reuse your real types
+interface Customer {
   name: string;
-  inventory?: number;
-  hidden?: boolean;
-  [key: string]: any; // optional fallback if your structure varies
+  lastname: string;
+  address: string;
+  email: string;
+  phone: string;
 }
 
 interface CartItem {
@@ -14,14 +16,20 @@ interface CartItem {
   quantity: number;
 }
 
+interface InventoryProduct {
+  name: string;
+  inventory?: number;
+  hidden?: boolean;
+  // add more fields from your product structure as needed:
+  [key: string]: unknown;
+}
+
 const redis = Redis.fromEnv();
 const resend = new Resend(process.env.RESEND_API_KEY);
-
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const orderId = searchParams.get("orderId");
-  
 
   if (!orderId) {
     return NextResponse.json({ error: "Missing orderId" }, { status: 400 });
@@ -29,17 +37,20 @@ export async function GET(req: NextRequest) {
 
   try {
     const rawData = await redis.get(`clients:${orderId}`);
-
     if (!rawData) {
       return NextResponse.json({ error: "Order not found in Redis" }, { status: 404 });
     }
 
-    const { customer, cart, amount }: { customer: any; cart: CartItem[]; amount: number } =
-    typeof rawData === "string" ? JSON.parse(rawData) : rawData;
-      
+    const {
+      customer,
+      cart,
+      amount,
+    }: { customer: Customer; cart: CartItem[]; amount: number } =
+      typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+
     const productsRaw = await redis.get("products");
     const products = typeof productsRaw === "string" ? JSON.parse(productsRaw) : productsRaw;
-    
+
     let updated = false;
 
     for (const item of cart) {
@@ -48,7 +59,7 @@ export async function GET(req: NextRequest) {
       if (product && typeof product.inventory === "number") {
         product.inventory = Math.max(0, product.inventory - item.quantity);
         if (product.inventory === 0) {
-          product.hidden = true; // Optional: Hide product when inventory hits 0
+          product.hidden = true;
         }
         updated = true;
       } else {
@@ -56,15 +67,13 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Save updated products back to Redis
     if (updated) {
       await redis.set("products", JSON.stringify(products));
       console.log("✅ Inventory updated after purchase");
     }
 
-
     const productSummary = cart
-      .map((p: { name: string; quantity: number }) => `• ${p.name} (x${p.quantity})`)
+      .map((p) => `• ${p.name} (x${p.quantity})`)
       .join("\n");
 
     const summary = `
@@ -81,7 +90,7 @@ ${productSummary}
 
     await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: "creyewearmx@gmail.com", 
+      to: "creyewearmx@gmail.com",
       subject: `🧾 Nueva orden en Creyewear`,
       text: summary,
     });
