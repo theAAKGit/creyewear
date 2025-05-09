@@ -41,12 +41,7 @@ export default function Footer() {
           <h3 className="text-black font-bold mb-2">Admin</h3>
           <ul className="text-sm space-y-1">
             <li>
-              <Link
-                href="/admin"
-                
-              >
-                Admin
-              </Link>
+              
             </li>
 
           </ul>
