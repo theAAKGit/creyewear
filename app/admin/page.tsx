@@ -26,7 +26,7 @@ const AdminPage = () => {
   const [editingPost, setEditingPost] = useState<Article | null>(null);
   const [blogImage, setBlogImage] = useState<string | null>(null);
   const categories = ["mujer", "hombre"];
-  const hardcodedPassword = "123";
+  const hardcodedPassword = "aB45078RRvm";
 
   // Stable useEffect dependencies (track length, not entire array)
   useEffect(() => {
