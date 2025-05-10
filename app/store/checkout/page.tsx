@@ -14,17 +14,22 @@ export default function Checkout() {
   const { cart } = useCart(); // 🛒 Get cart items from context
   const [deliveryMethod, setDeliveryMethod] = useState("home");
   const [street, setStreet] = useState("");
-const [extNumber, setExtNumber] = useState("");
-const [intNumber, setIntNumber] = useState("");
-const [colonia, setColonia] = useState("");
-const [municipio, setMunicipio] = useState("");
-const [estado, setEstado] = useState("");
-const [postalCode, setPostalCode] = useState("");
+  const [extNumber, setExtNumber] = useState("");
+  const [intNumber, setIntNumber] = useState("");
+  const [colonia, setColonia] = useState("");
+  const [municipio, setMunicipio] = useState("");
+  const [estado, setEstado] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  
+
 
 
   // ✅ Ensure `subtotal` correctly calculates total price
   const subtotal = cart.reduce((total, product) => total + Number(product.price) * product.quantity, 0);
-  
+  const discountedTotal = subtotal * (1 - discount);
+
 
   return (
     <div className="bg-[white] text-white min-h-screen py-12">
@@ -124,7 +129,28 @@ const [postalCode, setPostalCode] = useState("");
 
           {/* 💳 Payment Section */}
           <div className="mt-8">
-            
+
+          <div className="mt-6">
+          <h2 className="text-xl font-bold">Código de Promoción</h2>
+          <input
+            type="text"
+            placeholder="Introduce el código"
+            value={promoCode}
+            onChange={(e) => {
+              const code = e.target.value;
+              setPromoCode(code);
+              if (code.toLowerCase() === "mamá") {
+                setDiscount(0.10); // 10% discount
+              } else {
+                setDiscount(0);
+              }
+            }}
+            className="w-full border rounded p-2 mt-2 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#84AAAF]"
+          />
+          {discount > 0 && (
+            <p className="text-green-400 mt-2">Código aplicado: 10% de descuento</p>
+          )}
+        </div>
 
             {/* ✅ Pass subtotal & cart items correctly to PayPal */}
             <div className="mt-8">
@@ -133,12 +159,11 @@ const [postalCode, setPostalCode] = useState("");
             {/* Clip Payment */}
             <h2 className="text-xl font-bold mt-6">Pago con Clip</h2>
             <ClipButton
-              total={subtotal}
+              total={discountedTotal}
               customer={{
                 name: firstName,
                 lastname: lastName,
                 address: `${street}, No. ${extNumber}${intNumber ? ' Int. ' + intNumber : ''}, ${colonia}, ${municipio}, ${estado}, CP ${postalCode}`,
-
                 email,
                 phone,
               }}
@@ -185,12 +210,20 @@ const [postalCode, setPostalCode] = useState("");
             <span className="text-green-400">Gratis</span>
           </div>
           <div className="w-full bg-green-400 h-1 my-2"></div>
-         
 
           <div className="flex justify-between text-white font-bold text-lg">
             <span>Total</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>${discountedTotal.toFixed(2)}</span>
           </div>
+
+          {discount > 0 && (
+            <div className="flex justify-between text-green-400 mt-2">
+              <span>Descuento aplicado:</span>
+              <span>- ${(subtotal * discount).toFixed(2)}</span>
+            </div>
+          )}
+
+
 
           {/* 📅 Estimated Delivery */}
           <div className="mt-4 bg-gray-900 p-4 rounded-md">

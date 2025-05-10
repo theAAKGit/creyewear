@@ -26,7 +26,7 @@ export default function Header() {
         background: "url('/images/lilac-banner.png') no-repeat center/cover",
       }}
     >
-      Nada es lo que parece
+      Código de promoción: Mamá
     </div>
 
 
