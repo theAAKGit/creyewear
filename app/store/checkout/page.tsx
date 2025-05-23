@@ -139,7 +139,7 @@ export default function Checkout() {
             onChange={(e) => {
               const code = e.target.value;
               setPromoCode(code);
-              if (code.toLowerCase() === "mamá") {
+              if (code.toLowerCase() === "salamihumano") {
                 setDiscount(0.10); // 10% discount
               } else {
                 setDiscount(0);

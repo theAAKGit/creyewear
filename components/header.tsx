@@ -26,7 +26,7 @@ export default function Header() {
         background: "url('/images/lilac-banner.png') no-repeat center/cover",
       }}
     >
-      Código de promoción: Mamá
+      Nada es lo que parece      35% off
     </div>
 
 
